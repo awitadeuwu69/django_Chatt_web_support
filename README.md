@@ -39,7 +39,7 @@ El chat cuenta con:
 
 ```bash
 # 1️⃣ Clonar el repositorio
-git clone https://github.com/tuusuario/mi-proyecto-django-chat.git
+git clone awitadeuwu69/django_Chatt_web_support
 cd mi-proyecto-django-chat
 
 # 2️⃣ Crear y activar entorno virtual
@@ -47,7 +47,7 @@ python -m venv venv
 source venv/bin/activate   # En Linux / Mac
 venv\Scripts\activate      # En Windows
 
-# 3️⃣ Instalar dependencias
+# 3️⃣ Instalar dependencias (si es necesario)
 pip install -r requirements.txt
 
 # 4️⃣ Ejecutar migraciones
