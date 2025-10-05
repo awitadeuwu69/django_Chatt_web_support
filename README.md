@@ -55,3 +55,8 @@ python manage.py migrate
 
 # 5️⃣ Iniciar el servidor
 python manage.py runserver
+
+
+
+axelgay
+
