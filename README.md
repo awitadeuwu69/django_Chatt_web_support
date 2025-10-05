@@ -39,7 +39,7 @@ El chat cuenta con:
 
 ```bash
 # 1️⃣ Clonar el repositorio
-git clone [https://github.com/tuusuario/mi-proyecto-django-chat.git](https://github.com/awitadeuwu69/django_Chatt_web_support.git)
+git clone https://github.com/awitadeuwu69/django_Chatt_web_support.git
 cd django_Chatt_web_support
 
 # 2️⃣ Crear y activar entorno virtual
