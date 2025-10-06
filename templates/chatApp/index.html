@@ -3,42 +3,55 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Web con Login y Carrito</title>
+  <title>Web con Login, Productos y Carrito</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="icon" type="image/x-icon" href="{% static 'images/icon/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'css/chat.css' %}">
   <style>
-    body { margin-top: 40px; font-family: Arial, sans-serif; }
+    body { margin-top: 40px; font-family: Arial, sans-serif; background:#f4f4f4; }
+
     /* Topbar */
-    .topbar { position: fixed; top:0; right:0; width:100%; height:40px; background:#222; color:#fff; display:flex; justify-content:flex-end; align-items:center; padding-right:10px; z-index:1000; }
+    .topbar { position: fixed; top:0; right:0; width:100%; height:40px; background:#222; color:#fff;
+              display:flex; justify-content:flex-end; align-items:center; padding-right:10px; z-index:1000; }
     .menu-btn { background:none; border:none; color:#fff; font-size:20px; cursor:pointer; padding:4px 8px; }
-    .menu-dropdown { display:none; position:absolute; top:40px; right:10px; background:#333; border-radius:6px; min-width:140px; box-shadow:0 2px 6px rgba(0,0,0,0.3); }
+    .menu-dropdown { display:none; position:absolute; top:40px; right:10px; background:#333; border-radius:6px;
+                     min-width:140px; box-shadow:0 2px 6px rgba(0,0,0,0.3); }
     .menu-dropdown.active { display:block; }
-    .menu-dropdown button { width:100%; padding:10px; background:none; border:none; color:#fff; text-align:left; cursor:pointer; font-size:14px; }
+    .menu-dropdown button { width:100%; padding:10px; background:none; border:none; color:#fff;
+                            text-align:left; cursor:pointer; font-size:14px; }
     .menu-dropdown button:hover { background:#444; }
-    /* Login/Register popup */
-    .login-popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.3); width:280px; z-index:2000; }
-    .login-popup.active { display:block; }
-    .login-popup h3 { text-align:center; margin-top:0; }
-    .login-popup input { width:100%; padding:8px; margin:6px 0; border:1px solid #ccc; border-radius:6px; }
-    .login-popup button { width:100%; padding:8px; border:none; background:#0078ff; color:#fff; border-radius:6px; cursor:pointer; margin-top:8px; }
-    .login-popup button:hover { background:#005ecc; }
+
+    /* Productos */
+    .product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px;
+                    padding:20px; margin-top:60px; }
+    .product-card { background:#fff; border:1px solid #ccc; border-radius:10px; text-align:center; padding:10px;
+                    box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .product-card img { width:100%; height:140px; object-fit:cover; border-radius:8px; }
+    .product-card h4 { margin:8px 0 4px; font-size:16px; }
+    .product-card p { margin:4px 0; color:#333; font-size:14px; }
+    .product-card button { background:#0078ff; color:#fff; border:none; padding:8px 10px;
+                           border-radius:6px; cursor:pointer; }
+    .product-card button:hover { background:#005ecc; }
+
     /* Carrito */
-    .cart-popup { display:none; position:fixed; top:50px; right:10px; background:#fff; border-radius:6px; padding:10px; box-shadow:0 2px 8px rgba(0,0,0,0.3); z-index:2000; min-width:200px; }
+    .cart-popup { display:none; position:fixed; top:50px; right:10px; background:#fff; border-radius:6px;
+                  padding:10px; box-shadow:0 2px 8px rgba(0,0,0,0.3); z-index:2000; min-width:200px; }
     .cart-popup.active { display:block; }
+  .cart-popup .close-btn { position:absolute; top:6px; right:8px; background:#f0f0f0; border:none;
+               border-radius:4px; padding:4px 6px; cursor:pointer; font-weight:bold; }
+  .cart-popup .close-btn:hover { background:#e0e0e0; }
+    
+
     /* Chat */
-    .chat-container { position:fixed; bottom:0; right:10px; width:300px; max-height:500px; background:#f5f5f5; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; flex-direction:column; }
-    .chat-header { background:#0078ff; color:#fff; padding:8px; font-weight:bold; border-radius:10px 10px 0 0; text-align:center; }
+    .chat-container { position:fixed; bottom:0; right:10px; width:300px; max-height:500px; background:#f5f5f5;
+                      border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; flex-direction:column; }
+    .chat-header { background:#0078ff; color:#fff; padding:8px; font-weight:bold;
+                   border-radius:10px 10px 0 0; text-align:center; }
     .messages { flex:1; overflow-y:auto; padding:8px; }
     .input-row { display:flex; padding:8px; gap:4px; }
     .input-row input { flex:1; padding:6px; border-radius:6px; border:1px solid #ccc; }
-    .input-row button { padding:6px 10px; border:none; border-radius:6px; background:#0078ff; color:#fff; cursor:pointer; }
-    .avatars { display:flex; padding:4px; justify-content:center; gap:4px; }
-    .avatar-option { width:32px; height:32px; border-radius:50%; cursor:pointer; border:2px solid transparent; }
-    .avatar-option.selected { border-color:#0078ff; }
-    .message { display:flex; gap:6px; margin-bottom:6px; }
-    .message .icon { width:36px; height:36px; border-radius:50%; overflow:hidden; background:#ccc; display:flex; align-items:center; justify-content:center; }
-    .message .text { background:#eee; padding:4px 6px; border-radius:6px; flex:1; }
+    .input-row button { padding:6px 10px; border:none; border-radius:6px; background:#0078ff;
+                        color:#fff; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -48,200 +61,325 @@
   <button class="menu-btn" id="menuBtn">☰</button>
   <div class="menu-dropdown" id="menuDropdown">
     <button id="cartBtn">Carrito</button>
-    <button id="loginBtn">Iniciar sesión</button>
-    <button id="registerBtn">Registrarse</button>
+    {% if user.is_authenticated %}
+      <div style="padding:8px; color:#fff; font-size:14px;">Conectado como <strong>{{ user.username }}</strong></div>
+      <button id="logoutBtn">Cerrar sesión</button>
+    {% else %}
+      <button id="loginBtn">Iniciar sesión</button>
+      <button id="registerBtn">Registrarse</button>
+    {% endif %}
   </div>
 </div>
 
-<!-- Login popup -->
-<div class="login-popup" id="loginPopup">
-  <h3>Iniciar sesión</h3>
-  <input type="text" id="loginUser" placeholder="Usuario">
-  <input type="password" id="loginPass" placeholder="Contraseña">
-  <button id="confirmLogin">Entrar</button>
-</div>
-
-<!-- Register popup -->
-<div class="login-popup" id="registerPopup">
-  <h3>Registrarse</h3>
-  <input type="text" id="regUser" placeholder="Usuario">
-  <input type="password" id="regPass" placeholder="Contraseña">
-  <input type="password" id="regPass2" placeholder="Repetir contraseña">
-  <button id="confirmRegister">Registrar</button>
+<!-- === PRODUCTOS FICTICIOS === -->
+<div class="product-grid">
+  <div class="product-card" data-id="1">
+    <img src="{% static 'images/products/mouse.jpg' %}" alt="Mouse gamer">
+    <h4>Mouse Gamer</h4>
+    <p>$19.990</p>
+    <button class="add-btn">Agregar al carrito</button>
+  </div>
+  <div class="product-card" data-id="2">
+    <img src="{% static 'images/products/teclado.jpg' %}" alt="Teclado mecánico">
+    <h4>Teclado Mecánico</h4>
+    <p>$34.990</p>
+    <button class="add-btn">Agregar al carrito</button>
+  </div>
+  <div class="product-card" data-id="3">
+    <img src="{% static 'images/products/monitor.jpg' %}" alt="Monitor 144Hz">
+    <h4>Monitor 144Hz</h4>
+    <p>$179.990</p>
+    <button class="add-btn">Agregar al carrito</button>
+  </div>
+  <div class="product-card" data-id="4">
+    <img src="{% static 'images/products/audifonos.jpg' %}" alt="Audífonos">
+    <h4>Audífonos</h4>
+    <p>$24.990</p>
+    <button class="add-btn">Agregar al carrito</button>
+  </div>
+  <div class="product-card" data-id="5">
+    <img src="{% static 'images/products/silla.jpg' %}" alt="Silla gamer">
+    <h4>Silla Gamer</h4>
+    <p>$99.990</p>
+    <button class="add-btn">Agregar al carrito</button>
+  </div>
+  <div class="product-card" data-id="6">
+    <img src="{% static 'images/products/gpu.jpg' %}" alt="Tarjeta gráfica">
+    <h4>Tarjeta Gráfica</h4>
+    <p>$299.990</p>
+    <button class="add-btn">Agregar al carrito</button>
+  </div>
 </div>
 
 <!-- Carrito popup -->
 <div class="cart-popup" id="cartPopup">
+  <button id="cartCloseBtn" class="close-btn" aria-label="Cerrar carrito">✕</button>
   <h4>Carrito</h4>
   <ul id="cartItems"></ul>
 </div>
 
+<!-- Modal Login -->
+<div id="loginModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.3); z-index:3000;">
+  <form id="loginForm">
+    <h3>Iniciar sesión</h3>
+    <input type="text" id="loginUsername" placeholder="Usuario" required><br><br>
+    <input type="password" id="loginPassword" placeholder="Contraseña" required><br><br>
+    <button type="submit">Entrar</button>
+    <button type="button" id="closeLogin">Cerrar</button>
+  </form>
+</div>
+
+<!-- Modal Registro -->
+<div id="registerModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
+    background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.3); z-index:3000;">
+  <form id="registerForm">
+    <h3>Registrarse</h3>
+    <input type="text" id="registerUsername" placeholder="Usuario" required><br><br>
+    <input type="password" id="registerPassword" placeholder="Contraseña" required><br><br>
+    <input type="password" id="registerPasswordConfirm" placeholder="Confirmar contraseña" required><br><br>
+    <button type="submit">Registrar</button>
+    <button type="button" id="closeRegister">Cerrar</button>
+  </form>
+</div>
+
+
 <!-- Chat container -->
 <div class="chat-container" id="chatContainer">
-  <div class="chat-header">
-    Chat Global
-    <div id="datetime" style="font-size:12px;opacity:.9;margin-top:4px"></div>
-  </div>
-  <div class="tabs" id="tabs">
-    <div class="tab active" data-tab="nacional">Nacional</div>
-    <div class="tab" data-tab="local">Local</div>
-    <div class="tab" data-tab="soporte">Soporte</div>
-  </div>
+  <div class="chat-header">Chat Global</div>
   <div class="messages" id="messages"></div>
   <div class="input-row">
     <input type="text" id="msgInput" placeholder="Escribe un mensaje...">
     <button id="sendBtn">Enviar</button>
-  </div>
-  <div class="avatars" id="avatars">
-    {% for avatar in avatars %}
-      <img src="{{ avatar }}" class="avatar-option" data-src="{{ avatar }}" alt="avatar">
-    {% endfor %}
   </div>
 </div>
 
 <form id="csrf-form" style="display:none;">{% csrf_token %}</form>
 
 <script>
-/* === URLs API === */
-const LOGIN_URL = "{% url 'login' %}";
-const REGISTER_URL = "{% url 'register' %}";
-const MESSAGES_URL = "{% url 'messages_api' %}";
-
-/* === CSRF token === */
-let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '';
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    document.cookie.split(';').forEach(cookie => {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + '=')) cookieValue = decodeURIComponent(cookie.substring(name.length+1));
-    });
-  }
-  return cookieValue;
+/* === Utilidades CSRF === */
+function getCSRFToken() {
+  return document.querySelector('[name=csrfmiddlewaretoken]').value;
 }
 
-/* === Menu UI === */
+/* === Menú === */
 const menuBtn = document.getElementById('menuBtn');
 const menuDropdown = document.getElementById('menuDropdown');
-const loginPopup = document.getElementById('loginPopup');
-const registerPopup = document.getElementById('registerPopup');
-const cartPopup = document.getElementById('cartPopup');
-
-menuBtn.addEventListener('click', ()=> menuDropdown.classList.toggle('active'));
-document.addEventListener('click', e => {
-  if(!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) menuDropdown.classList.remove('active');
+menuBtn.addEventListener('click', () => {
+  menuDropdown.classList.toggle('active');
 });
-document.getElementById('loginBtn').addEventListener('click', ()=> { loginPopup.classList.toggle('active'); menuDropdown.classList.remove('active'); });
-document.getElementById('registerBtn').addEventListener('click', ()=> { registerPopup.classList.toggle('active'); menuDropdown.classList.remove('active'); });
-document.getElementById('cartBtn').addEventListener('click', ()=> { cartPopup.classList.toggle('active'); menuDropdown.classList.remove('active'); });
 
-/* === Login/Register === */
-document.getElementById('confirmLogin').addEventListener('click', async () => {
-  const username = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value.trim();
-  if(!username || !password){ alert('Completa los campos'); return; }
+/* === Carrito === */
+async function addToCart(productId) {
   try {
-    const res = await fetch(LOGIN_URL, { method:'POST', headers:{ 'Content-Type':'application/json','X-CSRFToken':csrftoken }, body: JSON.stringify({username,password}) });
+    const res = await fetch('/cart/add/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCSRFToken(),
+      },
+      body: JSON.stringify({ product_id: productId, cantidad: 1 }),
+    });
+    if (res.status === 401) {
+      // Not authenticated -> open login modal
+      if (loginModal) loginModal.style.display = 'block';
+      alert('Debes iniciar sesión para agregar al carrito');
+      return;
+    }
     const data = await res.json();
-    if(data.success){ alert('Login exitoso'); loginPopup.classList.remove('active'); }
-    else alert(data.error||'Error en login');
-  } catch(e){ console.error(e); alert('Error en la petición'); }
+    if (res.ok && data.success) {
+      alert('Producto agregado al carrito');
+      await loadCart();
+    } else {
+      alert(data.error || 'Error al agregar al carrito');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function loadCart() {
+  try {
+    const res = await fetch('/cart/');
+    if (res.status === 401) {
+      if (loginModal) loginModal.style.display = 'block';
+      return;
+    }
+    const data = await res.json();
+    const ul = document.getElementById('cartItems');
+    ul.innerHTML = '';
+    data.items.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.nombre} (${item.cantidad}) - $${item.subtotal}`;
+      ul.appendChild(li);
+    });
+  } catch (err) {
+    console.error('Error loading cart', err);
+  }
+}
+
+document.querySelectorAll('.add-btn').forEach(btn => {
+  btn.addEventListener('click', e => {
+    const id = e.target.closest('.product-card').dataset.id;
+    addToCart(id);
+  });
 });
 
-document.getElementById('confirmRegister').addEventListener('click', async () => {
-  const username = document.getElementById('regUser').value.trim();
-  const password = document.getElementById('regPass').value.trim();
-  const password2 = document.getElementById('regPass2').value.trim();
-  if(!username || !password || !password2){ alert('Completa todos los campos'); return; }
-  if(password !== password2){ alert('Las contraseñas no coinciden'); return; }
-  try {
-    const res = await fetch(REGISTER_URL, { method:'POST', headers:{ 'Content-Type':'application/json','X-CSRFToken':csrftoken }, body: JSON.stringify({username,password}) });
-    const data = await res.json();
-    if(data.success){ alert('Registro exitoso'); registerPopup.classList.remove('active'); }
-    else alert(data.error||'Error en registro');
-  } catch(e){ console.error(e); alert('Error en la petición'); }
+document.getElementById('cartBtn').addEventListener('click', () => {
+  document.getElementById('cartPopup').classList.toggle('active');
+  loadCart();
 });
+// Close button for cart popup
+const cartCloseBtn = document.getElementById('cartCloseBtn');
+if (cartCloseBtn) {
+  cartCloseBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    document.getElementById('cartPopup').classList.remove('active');
+  });
+}
+
 
 /* === Chat === */
-let activeTab = 'nacional';
-let selectedAvatar = document.querySelector('.avatar-option')?.dataset.src || '';
-
-document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  t.classList.add('active');
-  activeTab = t.dataset.tab;
-  loadMessages(activeTab);
-}));
-
-document.querySelectorAll('.avatar-option').forEach(img => {
-  img.addEventListener('click', () => {
-    document.querySelectorAll('.avatar-option').forEach(i=>i.classList.remove('selected'));
-    img.classList.add('selected');
-    selectedAvatar = img.dataset.src;
+async function cargarMensajes() {
+  const res = await fetch('/messages/?tab=nacional');
+  const data = await res.json();
+  const messagesDiv = document.getElementById('messages');
+  messagesDiv.innerHTML = '';
+  data.messages.forEach(m => {
+    const p = document.createElement('p');
+    p.textContent = `[${m.timestamp}] ${m.text}`;
+    messagesDiv.appendChild(p);
   });
-  if(!selectedAvatar){ img.classList.add('selected'); selectedAvatar = img.dataset.src; }
-});
-
-function escapeHtml(str) {
-  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 }
 
-function appendMessage(m){
-  const container = document.getElementById('messages');
-  const wrap = document.createElement('div');
-  wrap.className = 'message';
-  const icon = document.createElement('div'); icon.className='icon';
-  if(m.avatar){ const im=document.createElement('img'); im.src=m.avatar; im.style.width='100%'; im.style.height='100%'; im.style.objectFit='cover'; icon.appendChild(im); }
-  else icon.textContent='👤';
-  const txt = document.createElement('div'); txt.className='text';
-  txt.innerHTML = `<div style="font-size:11px;color:#666;margin-bottom:4px">${m.timestamp||''}</div><div>${escapeHtml(m.text)}</div>`;
-  wrap.appendChild(icon); wrap.appendChild(txt); container.appendChild(wrap); container.scrollTop=container.scrollHeight;
+async function enviarMensaje() {
+  const msg = document.getElementById('msgInput').value.trim();
+  if (!msg) return;
+  await fetch('/messages/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: msg, tab: 'nacional', avatar: ''}),
+  });
+  document.getElementById('msgInput').value = '';
+  cargarMensajes();
 }
 
-async function loadMessages(tab){
-  try {
-    const res = await fetch(`${MESSAGES_URL}?tab=${encodeURIComponent(tab)}`);
-    if(!res.ok) throw new Error('No se pudieron cargar mensajes');
-    const data = await res.json();
-    document.getElementById('messages').innerHTML='';
-    data.messages.forEach(m=>appendMessage(m));
-  } catch(e){ console.error(e); }
-}
-
-async function sendMessage(){
-  const input = document.getElementById('msgInput');
-  const text = input.value.trim();
-  if(!text) return;
-  csrftoken = csrftoken || getCookie('csrftoken') || document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '';
-  try {
-    const res = await fetch(MESSAGES_URL, { method:'POST', headers:{'Content-Type':'application/json','X-CSRFToken':csrftoken}, body: JSON.stringify({text,tab:activeTab,avatar:selectedAvatar}) });
-    if(!res.ok){ const errText=await res.text().catch(()=>null); throw new Error(errText||res.status); }
-    const data = await res.json();
-    appendMessage(data.message);
-    input.value='';
-  } catch(err){ alert('No se pudo enviar el mensaje'); console.error(err); }
-}
-
-document.getElementById('sendBtn').addEventListener('click', sendMessage);
-document.getElementById('msgInput').addEventListener('keypress', e=>{ if(e.key==='Enter') sendMessage(); });
-
-/* datetime */
-function updateDateTime(){
-  const now = new Date();
-  const d=String(now.getDate()).padStart(2,'0');
-  const m=String(now.getMonth()+1).padStart(2,'0');
-  const y=now.getFullYear();
-  const hh=String(now.getHours()).padStart(2,'0');
-  const mm=String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('datetime').textContent=`${d}/${m}/${y} ${hh}:${mm}`;
-}
-updateDateTime();
-setInterval(updateDateTime,60000);
-
-/* inicial carga mensajes */
-loadMessages(activeTab);
+document.getElementById('sendBtn').addEventListener('click', enviarMensaje);
+setInterval(cargarMensajes, 4000);
+cargarMensajes();
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+
+  // --- LOGIN ---
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const response = await fetch("{% url 'login' %}", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert("Inicio de sesión exitoso ✅");
+          location.reload();
+        } else {
+          alert(data.error || "Error al iniciar sesión");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error de conexión");
+      }
+    });
+  }
+
+  // --- REGISTRO ---
+  if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('registerUsername').value;
+      const password = document.getElementById('registerPassword').value;
+      const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+      if (password !== passwordConfirm) {
+        alert('Las contraseñas no coinciden');
+        return;
+      }
+
+      try {
+        const response = await fetch("{% url 'register' %}", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          // Intentar login automático después de registrarse
+          try {
+            const loginRes = await fetch("{% url 'login' %}", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password })
+            });
+            const loginData = await loginRes.json();
+            if (loginData.success) {
+              alert("Registro y login exitoso ✅");
+              location.reload();
+            } else {
+              alert("Registro exitoso. Por favor inicia sesión.");
+              registerModal.style.display = 'none';
+            }
+          } catch (err) {
+            console.error('Auto-login failed', err);
+            alert('Registro exitoso. Por favor inicia sesión.');
+            registerModal.style.display = 'none';
+          }
+        } else {
+          alert(data.error || "Error al registrarse");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error de conexión");
+      }
+    });
+  }
+});
+</script>
+<script>
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+const closeLogin = document.getElementById('closeLogin');
+const closeRegister = document.getElementById('closeRegister');
+const logoutBtn = document.getElementById('logoutBtn');
+
+if (loginBtn) loginBtn.addEventListener('click', () => loginModal.style.display = 'block');
+if (registerBtn) registerBtn.addEventListener('click', () => registerModal.style.display = 'block');
+if (closeLogin) closeLogin.addEventListener('click', () => loginModal.style.display = 'none');
+if (closeRegister) closeRegister.addEventListener('click', () => registerModal.style.display = 'none');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      await fetch("{% url 'logout' %}", { method: 'POST' });
+      location.reload();
+    } catch (err) {
+      console.error(err);
+      alert('Error al cerrar sesión');
+    }
+  });
+}
+</script>
+
 
 </body>
 </html>
