@@ -23,8 +23,8 @@ from chatApp import views
 
 urlpatterns = [
     path('chat/', views.chat_view, name='chat'),
-    path('login/', views.login_api, name='login'),        # apunta a login_api
-    path('register/', views.register_api, name='register'), # apunta a register_api
+    path('login/', views.login_api, name='login'),       
+    path('register/', views.register_api, name='register'), 
     path('logout/', views.logout_api, name='logout'),
     path('messages/', views.messages_api, name='messages_api'),
     path('cart/', views.get_cart, name='get_cart'),
