@@ -42,7 +42,8 @@ def messages_api(request):
             'id': m.id,
             'text': m.text,
             'avatar': m.avatar,
-            'timestamp': m.timestamp.strftime('%d/%m/%Y %H:%M')
+            'timestamp': m.timestamp.strftime('%d/%m/%Y %H:%M'),
+            'sender': m.sender or ''
         } for m in msgs]
         return JsonResponse({'messages': data})
 
@@ -52,14 +53,16 @@ def messages_api(request):
         text = payload.get('text', '').strip()
         tab = payload.get('tab', 'nacional')
         avatar = payload.get('avatar', '')
+        sender = payload.get('sender', '')
         if not text:
             return HttpResponseBadRequest('Mensaje vacío')
-        m = Message.objects.create(text=text, tab=tab, avatar=avatar)
+        m = Message.objects.create(text=text, tab=tab, avatar=avatar, sender=sender)
         return JsonResponse({'message': {
             'id': m.id,
             'text': m.text,
             'avatar': m.avatar,
-            'timestamp': m.timestamp.strftime('%d/%m/%Y %H:%M')
+            'timestamp': m.timestamp.strftime('%d/%m/%Y %H:%M'),
+            'sender': m.sender or ''
         }})
     except Exception as e:
         return HttpResponseBadRequest(str(e))

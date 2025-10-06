@@ -14,6 +14,8 @@ class Message(models.Model):
     text = models.TextField()
     avatar = models.CharField(max_length=255, blank=True)  
     timestamp = models.DateTimeField(auto_now_add=True)
+    # store the sender's username (optional)
+    sender = models.CharField(max_length=150, blank=True, null=True)
 
     def __str__(self):
         return f"{self.get_tab_display()} - {self.text[:30]}"

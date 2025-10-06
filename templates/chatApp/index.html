@@ -239,34 +239,159 @@ if (cartCloseBtn) {
 }
 
 
-/* === Chat === */
-async function cargarMensajes() {
-  const res = await fetch('/messages/?tab=nacional');
-  const data = await res.json();
-  const messagesDiv = document.getElementById('messages');
-  messagesDiv.innerHTML = '';
-  data.messages.forEach(m => {
-    const p = document.createElement('p');
-    p.textContent = `[${m.timestamp}] ${m.text}`;
-    messagesDiv.appendChild(p);
+/* Chat: improved client (CSRF, avatars, tabs, datetime) */
+/* leer cookie */
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+/* CSRF token: primero intenta cookie, si no existe, fallback leyendo el input hidden
+  con name="csrfmiddlewaretoken" (el formulario oculto con {% csrf_token %} está en la plantilla) */
+const _csrfInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+let csrftoken = getCookie('csrftoken') || (_csrfInput ? _csrfInput.value : null);
+
+/* si no existe inmediatamente, intenta actualizarlo después de un pequeño delay */
+if (!csrftoken) {
+  setTimeout(() => {
+    try {
+      const _delayedInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+      csrftoken = (typeof getCookie === 'function' ? getCookie('csrftoken') : null) || (_delayedInput ? _delayedInput.value : null);
+      console.log('csrf token (delayed):', csrftoken);
+    } catch (err) {
+      console.warn('Error while trying to read delayed CSRF token:', err);
+    }
+  }, 50);
+}
+
+/* datetime */
+function updateDateTime() {
+  const now = new Date();
+  const d = String(now.getDate()).padStart(2,'0');
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const y = now.getFullYear();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  const dtEl = document.getElementById('datetime');
+  if (dtEl) dtEl.textContent = `${d}/${m}/${y} ${hh}:${mm}`;
+}
+updateDateTime();
+setInterval(updateDateTime, 60000);
+
+/* UI: tabs */
+const tabs = document.querySelectorAll('.tab');
+let activeTab = 'nacional';
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  activeTab = t.dataset.tab;
+  loadMessages(activeTab);
+}));
+
+/* avatar picker */
+let selectedAvatar = '';
+document.querySelectorAll('.avatar-option').forEach(img=>{
+  img.addEventListener('click', ()=> {
+    document.querySelectorAll('.avatar-option').forEach(i=>i.classList.remove('selected'));
+    img.classList.add('selected');
+    selectedAvatar = img.dataset.src;
+  });
+});
+const firstAvatar = document.querySelector('.avatar-option');
+if (firstAvatar) { firstAvatar.classList.add('selected'); selectedAvatar = firstAvatar.dataset.src; }
+
+/* append message to DOM */
+function appendMessage(m){
+  const container = document.getElementById('messages');
+  const wrap = document.createElement('div');
+  wrap.className = 'message';
+  const icon = document.createElement('div');
+  icon.className = 'icon';
+  if (m.avatar) {
+    const im = document.createElement('img');
+    im.src = m.avatar;
+    im.style.width = '100%'; im.style.height = '100%'; im.style.objectFit = 'cover';
+    icon.appendChild(im);
+  } else {
+    icon.textContent = '👤';
+  }
+  const txt = document.createElement('div');
+  txt.className = 'text';
+  const senderHTML = m.sender ? `<div style="font-weight:600;margin-bottom:4px">${escapeHtml(m.sender)}</div>` : '';
+  txt.innerHTML = `${senderHTML}<div style="font-size:11px;color:#666;margin-bottom:4px">${m.timestamp || ''}</div><div>${escapeHtml(m.text)}</div>`;
+  wrap.appendChild(icon);
+  wrap.appendChild(txt);
+  container.appendChild(wrap);
+  container.scrollTop = container.scrollHeight;
+}
+
+/* escape básico para evitar inyección HTML en mensajes */
+function escapeHtml(unsafe) {
+  return unsafe.replace(/[&<>\"']/g, function(m) {
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;', "'":'&#039;'}[m]);
   });
 }
 
-async function enviarMensaje() {
-  const msg = document.getElementById('msgInput').value.trim();
-  if (!msg) return;
-  await fetch('/messages/', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({text: msg, tab: 'nacional', avatar: ''}),
-  });
-  document.getElementById('msgInput').value = '';
-  cargarMensajes();
+/* cargar mensajes desde API */
+async function loadMessages(tab){
+  try {
+    const res = await fetch('/messages/?tab=' + encodeURIComponent(tab));
+    if (!res.ok) throw new Error('No se pudieron cargar mensajes');
+    const data = await res.json();
+    const messagesEl = document.getElementById('messages');
+    if (messagesEl) messagesEl.innerHTML = '';
+    data.messages.forEach(m => appendMessage(m));
+  } catch(e) {
+    console.error(e);
+  }
 }
 
-document.getElementById('sendBtn').addEventListener('click', enviarMensaje);
-setInterval(cargarMensajes, 4000);
-cargarMensajes();
+/* enviar mensaje */
+async function sendMessage(){
+  const input = document.getElementById('msgInput');
+  const text = input?.value.trim();
+  if (!text) return;
+  // refresh csrf token if missing
+  csrftoken = csrftoken || getCookie('csrftoken') || document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || null;
+  try {
+    const res = await fetch('/messages/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({ text: text, tab: activeTab, avatar: selectedAvatar, sender: ("{% if user.is_authenticated %}{{ user.username }}{% else %}{% endif %}") })
+    });
+    if (!res.ok) {
+      const textErr = await res.text().catch(()=>null);
+      throw new Error('Server error: ' + (textErr || res.status));
+    }
+    const data = await res.json();
+    appendMessage(data.message);
+    if (input) input.value = '';
+  } catch (err) {
+    alert('No se pudo enviar el mensaje.');
+    console.error(err);
+  }
+}
+
+const sendBtn = document.getElementById('sendBtn');
+const msgInput = document.getElementById('msgInput');
+if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+if (msgInput) msgInput.addEventListener('keypress', (e)=> { if (e.key === 'Enter') sendMessage(); });
+
+/* inicial carga */
+loadMessages(activeTab);
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
