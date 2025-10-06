@@ -29,5 +29,6 @@ urlpatterns = [
     path('messages/', views.messages_api, name='messages_api'),
     path('cart/', views.get_cart, name='get_cart'),
     path('cart/add/', views.add_to_cart, name='add_to_cart'),
+    path("admin/", admin.site.urls),
 ]
 
