@@ -17,9 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import path, include
+from chatApp import views
+
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('chat/', include('chatApp.urls', namespace='chatApp')),  # ← conecta tu app
+    path('chat/', views.chat_view, name='chat'),
+    path('login/', views.login_api, name='login'),        # apunta a login_api
+    path('register/', views.register_api, name='register'), # apunta a register_api
+    path('logout/', views.logout_api, name='logout'),
+    path('messages/', views.messages_api, name='messages_api'),
+    path('cart/', views.get_cart, name='get_cart'),
+    path('cart/add/', views.add_to_cart, name='add_to_cart'),
 ]
+
