@@ -29,23 +29,9 @@ tabs.forEach((t) =>
 );
 
 /* ========================================
-     CHAT - AVATAR PICKER
+     CHAT - AVATAR PICKER (removed)
   ======================================== */
-let selectedAvatar = "";
-document.querySelectorAll(".avatar-option").forEach((img) => {
-  img.addEventListener("click", () => {
-    document
-      .querySelectorAll(".avatar-option")
-      .forEach((i) => i.classList.remove("selected"));
-    img.classList.add("selected");
-    selectedAvatar = img.dataset.src;
-  });
-});
-const firstAvatar = document.querySelector(".avatar-option");
-if (firstAvatar) {
-  firstAvatar.classList.add("selected");
-  selectedAvatar = firstAvatar.dataset.src;
-}
+let selectedAvatar = ""; // avatars removed; keep empty
 
 /* ========================================
      CHAT - FUNCIONES
@@ -56,15 +42,12 @@ function appendMessage(m) {
   wrap.className = "message";
   const icon = document.createElement("div");
   icon.className = "icon";
-  if (m.avatar) {
-    const im = document.createElement("img");
-    im.src = m.avatar;
-    im.style.width = "100%";
-    im.style.height = "100%";
-    im.style.objectFit = "cover";
-    icon.appendChild(im);
-  } else {
-    icon.textContent = "👤";
+  // Avatars removed — optionally show a sender initial circle
+  if (m.sender) {
+    const initial = document.createElement('div');
+    initial.className = 'avatar-initial';
+    initial.textContent = m.sender.charAt(0).toUpperCase();
+    icon.appendChild(initial);
   }
   const txt = document.createElement("div");
   txt.className = "text";
@@ -146,10 +129,34 @@ if (msgInput)
 /* Chat close button */
 const closeChatBtn = document.getElementById("close-chat");
 if (closeChatBtn) {
-  closeChatBtn.addEventListener("click", () => {
-    const chatContainer = document.getElementById("chatContainer");
-    if (chatContainer) chatContainer.style.display = "none";
+  closeChatBtn.addEventListener('click', () => {
+    const overlay = document.getElementById('chatOverlay');
+    if (overlay) overlay.style.display = 'none';
   });
+}
+
+/* Toggle chat open/close with button */
+const toggleChatBtn = document.getElementById('toggle-chat');
+if (toggleChatBtn) {
+  toggleChatBtn.addEventListener('click', () => {
+    const overlay = document.getElementById('chatOverlay');
+    if (!overlay) return;
+    if (overlay.style.display === 'none' || getComputedStyle(overlay).display === 'none') {
+      overlay.style.display = 'flex';
+    } else {
+      overlay.style.display = 'none';
+    }
+  });
+}
+
+// Disable input if user not logged in
+if (!window.currentUsername || window.currentUsername.trim() === '') {
+  const input = document.getElementById('msgInput');
+  const send = document.getElementById('sendBtn');
+  if (input) { input.disabled = true; input.placeholder = 'Inicia sesión para escribir mensajes'; }
+  if (send) { send.disabled = true; }
+  // Optionally open login modal on focus/click
+  if (input) input.addEventListener('focus', () => { const loginModal = document.getElementById('loginModal'); if (loginModal) loginModal.style.display = 'block'; });
 }
 
 /* Cargar mensajes inicial */

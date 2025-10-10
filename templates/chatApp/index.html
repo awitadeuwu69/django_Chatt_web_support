@@ -129,8 +129,8 @@
           required
         />
         <button type="button"
-          id="showPassword"
-          onclick="togglePasswordVisibility('loginPassword','showPassword')"
+          id="showLoginPassword"
+          onclick="togglePasswordVisibility('loginPassword','showLoginPassword')"
         >👁️</button><br /><br />
 
         <button type="submit">Entrar</button>
@@ -180,14 +180,20 @@
           placeholder="Confirmar contraseña"
           required
         /><br /><br />
+        <button type="button"
+          id="showRegisterPassword"
+          onclick="togglePasswordVisibility('registerPassword', 'registerPasswordConfirm', 'showRegisterPassword')"
+        >👁️</button><br /><br />
         <button type="submit">Registrar</button>
         <button type="button" id="closeRegister">Cerrar</button>
       </form>
     </div>
 
-    <!-- Chat container -->
-    <div class="chat-container" id="chatContainer" role="dialog" aria-label="Chat">
-      <button id="close-chat" class="close-btn">✖</button>
+    <!-- Chat popup overlay -->
+    <div id="chatOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:2600;align-items:center;justify-content:center;">
+      <!-- Chat container -->
+      <div class="chat-container" id="chatContainer" role="dialog" aria-label="Chat" style="position:relative;display:flex;flex-direction:column;min-width:320px;max-width:420px;">
+        <button id="close-chat" class="close-btn" style="position:absolute;top:8px;right:8px;">✖</button>
       <div class="chat-header">
         Chat Global
         <div id="datetime" style="font-size:12px;opacity:.9;margin-top:4px"></div>
@@ -206,12 +212,10 @@
         <button id="sendBtn">Enviar</button>
       </div>
 
-      <div class="avatars" id="avatars">
-        {% for avatar in avatars %}
-          <img src="{{ avatar }}" class="avatar-option" data-src="{{ avatar }}" alt="avatar">
-        {% endfor %}
       </div>
     </div>
+    <!-- Chat toggle button -->
+    <button id="toggle-chat" class="chat-toggle" style="position:fixed;left:10px;bottom:10px;z-index:2500;padding:8px 10px;border-radius:6px;border:none;background:#0078ff;color:#fff;">Chat</button>
 
     <form id="csrf-form" style="display: none">{% csrf_token %}</form>
 

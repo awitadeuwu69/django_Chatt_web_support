@@ -256,19 +256,40 @@ function getCookie(name) {
     }
     
 // mostrar contra
-function togglePasswordVisibility(loginpassword, buttonId) {
-  const input = document.getElementById(loginpassword);
+function togglePasswordVisibility() {
+  // Accept multiple input IDs and a final buttonId as the last argument.
+  const args = Array.from(arguments);
+  if (args.length < 2) return; // need at least one input id and a button id
+  const buttonId = args[args.length - 1];
+  const inputIds = args.slice(0, -1);
   const button = document.getElementById(buttonId);
-  if (!input || !button) return;
+  if (!button) return;
 
-  if (input.type === "password") {
-    input.type = "text";
-    button.textContent = "😌"; // icono para ocultar
-    button.setAttribute('aria-label', 'Ocultar contraseña');
-  } else {
-    input.type = "password";
-    button.textContent = "👁️"; // icono para mostrar
+  // Determine current state based on first existing input
+  let firstInput = null;
+  for (const id of inputIds) {
+    const el = document.getElementById(id);
+    if (el) { firstInput = el; break; }
+  }
+  if (!firstInput) return;
+
+  const showing = firstInput.type !== 'password';
+  if (showing) {
+    // switch to password
+    inputIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.type = 'password';
+    });
+    button.textContent = '👁️';
     button.setAttribute('aria-label', 'Mostrar contraseña');
+  } else {
+    // switch to text
+    inputIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.type = 'text';
+    });
+    button.textContent = '✖️';
+    button.setAttribute('aria-label', 'Ocultar contraseña');
   }
 }
 
