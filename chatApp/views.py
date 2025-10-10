@@ -74,12 +74,15 @@ def register_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data.get("username")
+        email = data.get("email")
         password = data.get("password")
 
         if User.objects.filter(username=username).exists():
             return JsonResponse({"error": "El usuario ya existe"}, status=400)
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({"error": "El correo electrónico ya está registrado"}, status=400)
 
-        User.objects.create_user(username=username, password=password)
+        User.objects.create_user(username=username, email=email, password=password)
         return JsonResponse({"success": True, "message": "Usuario registrado correctamente"})
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
@@ -89,9 +92,10 @@ def login_api(request):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data.get("username")
+        email = data.get("email")
         password = data.get("password")
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, email=email, password=password)
         if user is not None:
             login(request, user)
             return JsonResponse({"success": True})

@@ -117,11 +117,22 @@
           required
         /><br /><br />
         <input
+          type="email"
+          id="loginEmail"
+          placeholder="Correo electrónico"
+          required
+        /><br /><br />
+        <input
           type="password"
           id="loginPassword"
           placeholder="Contraseña"
           required
-        /><br /><br />
+        />
+        <button type="button"
+          id="showPassword"
+          onclick="togglePasswordVisibility('loginPassword','showPassword')"
+        >👁️</button><br /><br />
+
         <button type="submit">Entrar</button>
         <button type="button" id="closeLogin">Cerrar</button>
       </form>
@@ -149,6 +160,12 @@
           type="text"
           id="registerUsername"
           placeholder="Usuario"
+          required
+        /><br /><br />
+        <input
+          type="email"
+          id="registerEmail"
+          placeholder="Correo electrónico"
           required
         /><br /><br />
         <input

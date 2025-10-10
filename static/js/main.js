@@ -159,6 +159,7 @@ function getCookie(name) {
       loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const username = document.getElementById("loginUsername").value;
+        const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
   
         try {
@@ -168,7 +169,7 @@ function getCookie(name) {
               "Content-Type": "application/json",
               "X-CSRFToken": getCSRFToken()
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, email, password }),
           });
   
           const data = await response.json();
@@ -190,6 +191,7 @@ function getCookie(name) {
       registerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const username = document.getElementById("registerUsername").value;
+        const email = document.getElementById("registerEmail").value;
         const password = document.getElementById("registerPassword").value;
         const passwordConfirm = document.getElementById(
           "registerPasswordConfirm"
@@ -199,6 +201,15 @@ function getCookie(name) {
           alert("Las contraseñas no coinciden");
           return;
         }
+        if (password.length < 6 && !password.includes("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~") && !password.includes("0-9")) {
+          alert("La contraseña debe tener al menos 6 caracteres, contener al menos un carácter especial y un número");
+          return;
+        }
+        if (!email.includes("@gmail.com")) {
+          alert("El correo electrónico no es válido(debe contener @gmail.com)");
+          return;
+        }
+        
   
         try {
           const response = await fetch("/register/", {
@@ -207,7 +218,7 @@ function getCookie(name) {
               "Content-Type": "application/json",
               "X-CSRFToken": getCSRFToken()
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, email, password }),
           });
   
           const data = await response.json();
@@ -219,7 +230,7 @@ function getCookie(name) {
                   "Content-Type": "application/json",
                   "X-CSRFToken": getCSRFToken()
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, email, password }),
               });
               const loginData = await loginRes.json();
               if (loginData.success) {
@@ -243,6 +254,33 @@ function getCookie(name) {
         }
       });
     }
+    
+// mostrar contra
+function togglePasswordVisibility(loginpassword, buttonId) {
+  const input = document.getElementById(loginpassword);
+  const button = document.getElementById(buttonId);
+  if (!input || !button) return;
+
+  if (input.type === "password") {
+    input.type = "text";
+    button.textContent = "😌"; // icono para ocultar
+    button.setAttribute('aria-label', 'Ocultar contraseña');
+  } else {
+    input.type = "password";
+    button.textContent = "👁️"; // icono para mostrar
+    button.setAttribute('aria-label', 'Mostrar contraseña');
+  }
+}
+
+// Expose function globally so inline onclick handlers can call it
+try {
+  window.togglePasswordVisibility = togglePasswordVisibility;
+  console.log('togglePasswordVisibility exported to window');
+} catch (e) {
+  // ignore if window not defined in this environment
+}
+
+
   
     // MODALES - BOTONES
     const loginBtn = document.getElementById("loginBtn");
