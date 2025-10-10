@@ -2,6 +2,7 @@ body {
   margin-top: 40px;
   font-family: Arial, sans-serif;
   background: #f4f4f4;
+  overflow: hidden;
 }
 
 /* Topbar */
@@ -60,7 +61,6 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
   padding: 20px;
-  margin-top: 60px;
 }
 .product-card {
   background: #fff;
