@@ -1,260 +1,311 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
   <meta charset="utf-8" />
-  <title>Software de Chat Support - Solución Digital para tu Negocio</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="{% static 'images/icon/favicon.png' %}"
-    />
-  <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
+  <title>Club Almacén - Plataforma de Comerciantes</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Plataforma para crear comunidad de comerciantes de barrio. Beneficios, capacitaciones, directorios y más.">
+  <link rel="icon" type="image/x-icon" href="{% static 'images/icon/favicon.png' %}" />
+  
+  <!-- CSS Consolidado -->
   <link rel="stylesheet" href="{% static 'css/main.css' %}" />
   <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
   <link rel="stylesheet" href="{% static 'css/elalmacen.css' %}" />
-  </head>
-  <body>
-    <!-- Topbar -->
-    <div class="topbar">
-      <button class="menu-btn" id="menuBtn">☰</button>
-      <div class="menu-dropdown" id="menuDropdown">
-        <button id="cartBtn">Carrito</button>
-        {% if user.is_authenticated %}
-        <div style="padding: 8px; color: #fff; font-size: 14px">
-          Conectado como <strong>{{ user.username }}</strong>
-        </div>
-        <button id="logoutBtn">Cerrar sesión</button>
-        {% else %}
-        <button id="loginBtn">Iniciar sesión</button>
-        <button id="registerBtn">Registrarse</button>
-        {% endif %}
-      </div>
-    </div>
-
-    <!-- El Almacén top utility bar -->
-    <div class="elal-topbar">
+  <link rel="stylesheet" href="{% static 'css/modals-chat.css' %}" />
+</head>
+<body>
+  <!-- ==================== TOPBAR UNIFICADO ==================== -->
+  <div class="topbar">
+    <!-- Sección superior con horario y acciones rápidas -->
+    <div class="topbar-top">
       <div class="container">
-        <div>Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.</div>
+        <div class="topbar-schedule">
+          📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+        </div>
         <div class="top-actions">
-          <a class="btn-cta btn-demo" href="#">Descargar Demo Gratis</a>
-          <a class="btn-cta btn-quote" href="#">Cotizar</a>
-          <a class="btn-cta btn-contact" href="#">Contáctenos</a>
+          <a class="btn-cta btn-demo" href="#demo">Descargar Demo Gratis</a>
+          <a class="btn-cta btn-quote" href="#beneficios">Cotizar</a>
+          <a class="btn-cta btn-contact" href="#contacto">Contáctenos</a>
         </div>
       </div>
     </div>
 
-    <!-- Blue navigation -->
-    <nav class="elal-nav">
-      <div class="nav-inner">
-        <a href="#" class="active">INICIO</a>
-        <a href="#">DESCRIPCIÓN</a>
-        <a href="#">FUNCIONES</a>
-        <a href="#">IMAGENES</a>
-        <a href="#">VIDEOS</a>
-        <a href="#">DESCARGAR GRATIS</a>
-        <a href="#">AYUDA</a>
-        <a href="#">CONTACTO</a>
-      </div>
-    </nav>
+    <!-- Sección principal con navegación -->
+    <div class="topbar-main">
+      <div class="container">
+        <a href="#" class="topbar-brand">
+          🏪 Club Almacén
+        </a>
 
-  <!-- Landing content (merged) -->
+        <nav class="topbar-nav">
+          <a href="#" class="active">INICIO</a>
+          <a href="#beneficios">BENEFICIOS</a>
+          <a href="#noticias">NOTICIAS</a>
+          <a href="#directorio">DIRECTORIO</a>
+          <a href="#capacitaciones">CAPACITACIONES</a>
+          <a href="#nuevos">NUEVOS COMERCIOS</a>
+          <a href="#kits">KITS POS</a>
+          <a href="#enlaces">ENLACES ÚTILES</a>
+        </nav>
+
+        <div class="topbar-actions">
+          {% if user.is_authenticated %}
+          <div class="user-info">
+            👤 <strong>{{ user.username }}</strong>
+          </div>
+          {% endif %}
+          
+          <button class="menu-btn" id="menuBtn" title="Menú">☰</button>
+          
+          <div class="menu-dropdown" id="menuDropdown">
+            {% if user.is_authenticated %}
+            <button id="profileBtn">👤 Mi Perfil</button>
+            <button id="favoritesBtn">⭐ Mis Favoritos</button>
+            <button id="logoutBtn">🚪 Cerrar sesión</button>
+            {% else %}
+            <button id="loginBtn">🔑 Iniciar sesión</button>
+            <button id="registerBtn">✍️ Registrarse</button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+  
+  <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <h1>Software de Chat Support</h1>
-      <p class="lead">Una solución digital moderna para la atención al cliente de tu negocio</p>
+      <h1>Bienvenido a Club Almacén</h1>
+      <p class="lead">La comunidad digital que fortalece a los comerciantes de barrio en Chile</p>
       <div class="hero-buttons">
-        <a href="#features" class="btn btn-primary">Ver Características</a>
-        <a href="#demo" class="btn btn-secondary">Solicitar Demo</a>
+        <a href="#beneficios" class="btn btn-primary">Ver Beneficios</a>
+        <a href="#register" class="btn btn-secondary">Unirme Ahora</a>
       </div>
     </div>
   </section>
 
-  <!-- Hero large visual similar to El Almacen -->
-  <section class="elal-hero-large">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <h2 style="color:#fff; font-size:2.2rem; margin-bottom:12px">SOFTWARE DE PUNTO DE VENTA</h2>
-        <p style="color:#e6eefb; font-size:1.05rem">Para negocios, comercios & tiendas</p>
-      </div>
-      <div class="hero-box">
-        <img src="{% static 'images/landing/box-pos.png' %}" alt="Caja POS">
-      </div>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section id="features" class="features">
+  <!-- Sección Beneficios -->
+  <section id="beneficios" class="features">
     <div class="container">
-      <h2>¿Por qué elegir nuestro Chat Support?</h2>
+      <h2>Beneficios para Comerciantes</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="icon">💬</div>
-          <h3>Chat en Tiempo Real</h3>
-          <p>Comunicación instantánea con tus clientes, sin demoras ni esperas.</p>
+          <div class="icon">🎁</div>
+          <h3>Concursos y Sorteos</h3>
+          <p>Participa en concursos exclusivos y gana premios para tu negocio.</p>
         </div>
         <div class="feature-card">
-          <div class="icon">🔒</div>
-          <h3>Seguro y Confiable</h3>
-          <p>Tus conversaciones están protegidas y son completamente privadas.</p>
+          <div class="icon">📚</div>
+          <h3>Capacitaciones</h3>
+          <p>Accede a charlas, webinars y capacitaciones gratuitas para mejorar tu negocio.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">💰</div>
+          <h3>Descuentos Especiales</h3>
+          <p>Obtén descuentos exclusivos con proveedores y en productos para tu almacén.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🤝</div>
+          <h3>Red de Contactos</h3>
+          <p>Conéctate con otros comerciantes y proveedores de confianza.</p>
         </div>
         <div class="feature-card">
           <div class="icon">📱</div>
-          <h3>Multiplataforma</h3>
-          <p>Accede desde cualquier dispositivo, en cualquier momento.</p>
+          <h3>Software POS</h3>
+          <p>Accede a tecnología de punto de venta diseñada para tu negocio.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🤖</div>
+          <h3>Asistente IA</h3>
+          <p>Consulta con nuestro asistente virtual especializado en comercio.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Use Cases Section -->
-  <section id="uses" class="uses">
+  <!-- Sección Noticias -->
+  <section id="noticias" class="uses">
     <div class="container">
-      <h2>¿En qué negocios se puede utilizar?</h2>
+      <h2>Noticias y Actualidad</h2>
+      <p style="text-align: center; margin-bottom: 40px;">Mantente informado con las últimas noticias del sector</p>
       <div class="uses-grid">
         <div class="use-case">
-          <h3>Comercios</h3>
+          <h3>📰 Noticias Nacionales</h3>
           <ul>
-            <li>Tiendas online</li>
-            <li>Retail</li>
-            <li>Supermercados</li>
+            <li>Actualidad económica</li>
+            <li>Cambios en legislación</li>
+            <li>Tendencias de consumo</li>
           </ul>
         </div>
         <div class="use-case">
-          <h3>Servicios</h3>
+          <h3>📱 Redes Sociales</h3>
           <ul>
-            <li>Consultoría</li>
-            <li>Soporte técnico</li>
-            <li>Atención al cliente</li>
+            <li>Facebook e Instagram</li>
+            <li>YouTube y TikTok</li>
+            <li>Contenido especializado</li>
           </ul>
         </div>
         <div class="use-case">
-          <h3>Profesionales</h3>
+          <h3>🏛️ Servicios Públicos</h3>
           <ul>
-            <li>Despachos</li>
-            <li>Clínicas</li>
-            <li>Oficinas</li>
+            <li>SII y trámites fiscales</li>
+            <li>Fonasa y Previred</li>
+            <li>Municipalidades</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Requirements Section -->
-  <section id="requirements" class="requirements">
+  <!-- Sección Nuevos Comercios -->
+  <section id="nuevos" class="requirements">
     <div class="container">
-      <h2>¿Qué necesitas para comenzar?</h2>
+      <h2>¿Estás empezando tu negocio?</h2>
       <div class="requirements-content">
         <div class="requirements-text">
-          <p>Solo necesitas:</p>
+          <p>Te ayudamos en cada paso:</p>
           <ul>
-            <li>Una conexión a internet</li>
-            <li>Un navegador web moderno</li>
-            <li>Una cuenta en nuestro sistema</li>
+            <li>Guía de trámites legales</li>
+            <li>Ideas de negocio</li>
+            <li>Contacto con proveedores</li>
+            <li>Tecnología y software</li>
+            <li>Asesoría inicial gratuita</li>
           </ul>
+          <a href="#register" class="btn btn-primary" style="margin-top: 20px;">Comenzar Ahora</a>
         </div>
         <div class="requirements-image">
-          <img src="{% static 'images/requirements.jpg' %}" alt="Requisitos del sistema">
+          <img src="{% static 'images/nuevos-comercios.jpg' %}" alt="Nuevos comercios">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Demo Section -->
-  <section id="demo" class="demo">
-    <div class="container">
-      <h2>Solicita una Demo</h2>
-      <form class="demo-form">
-        <div class="form-group">
-          <input type="text" placeholder="Nombre" required>
-        </div>
-        <div class="form-group">
-          <input type="email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <input type="tel" placeholder="Teléfono">
-        </div>
-        <div class="form-group">
-          <select required>
-            <option value="">Tipo de negocio</option>
-            <option value="retail">Retail</option>
-            <option value="services">Servicios</option>
-            <option value="professional">Profesional</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Solicitar Demo</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- El Almacén imported sections -->
-  <section class="elal-section">
+  <!-- Kits POS Section -->
+  <section id="kits" class="elal-section">
     <div class="elal-container">
-      <h2>Digitaliza tu Almacén 2025</h2>
-      <p>Conoce nuestros KIT de Punto de Venta y los beneficios del convenio de Club Almacén y Almacenes de Chile.</p>
+      <h2>Kits de Punto de Venta 2025</h2>
+      <p>Digitaliza tu negocio con nuestros kits completos de hardware y software</p>
 
-      <div class="elal-gallery" aria-label="Kits">
-        <div class="elal-card"><img src="{% static 'images/landing/kit-pos-sercotec-200-1024x1024.png' %}" alt="kit pos"><p>Kit POS Sercotec</p></div>
-        <div class="elal-card"><img src="{% static 'images/landing/sercotec.png' %}" alt="sercotec"><p>Sercotec</p></div>
-        <div class="elal-card"><img src="{% static 'images/landing/aio-ach.png' %}" alt="aio"><p>Computador AIO</p></div>
+      <div class="elal-gallery">
+        <div class="elal-card">
+          <img src="{% static 'images/landing/kit-pos-sercotec-200-1024x1024.png' %}" alt="kit pos">
+          <p>Kit POS Sercotec</p>
+        </div>
+        <div class="elal-card">
+          <img src="{% static 'images/landing/sercotec.png' %}" alt="sercotec">
+          <p>Sercotec</p>
+        </div>
+        <div class="elal-card">
+          <img src="{% static 'images/landing/aio-ach.png' %}" alt="aio">
+          <p>Computador AIO</p>
+        </div>
       </div>
 
-      <p class="elal-footer-small">¿Ganaste el concurso ALMACENES DE CHILE? Solicita una cotización para tu kit.</p>
+      <p class="elal-footer-small">¿Ganaste el concurso ALMACENES DE CHILE? Solicita tu cotización aquí.</p>
     </div>
   </section>
+
   <!-- Boleta Electrónica -->
-  <section class="elal-boleta">
+  <section id="boleta" class="elal-boleta">
     <div class="boleta-inner">
       <div class="boleta-img">
         <img src="{% static 'images/landing/boleta-pos.png' %}" alt="Boleta Electrónica">
       </div>
       <div class="boleta-content">
         <h2>Boleta Electrónica de Club Almacén</h2>
-        <p>Un servicio de Pago a un precio conveniente, que se renueva anualmente. Imprime boletas electrónicas con el software El Almacén, aún cuando no tengas Internet. Al volver la Internet, conéctate directamente con el Sii y evita costos de intermediarios.</p>
-        <a class="btn-more" href="#">MAS INFORMACION</a>
+        <p>Servicio de pago anual conveniente. Imprime boletas electrónicas con el software El Almacén, incluso sin Internet. Al recuperar conexión, sincroniza directamente con el SII sin costos de intermediarios.</p>
+        <a class="btn-more" href="#contacto">MÁS INFORMACIÓN</a>
       </div>
     </div>
   </section>
 
-  <!-- Features row -->
+  <!-- Features Row -->
   <section class="elal-features">
     <div class="elal-feat-grid">
-      <div class="elal-feat"><div class="icon">🧾</div><h4>Boletas Electrónicas</h4><p>Ilimitadas y sencillas</p></div>
-      <div class="elal-feat"><div class="icon">🔐</div><h4>Licencia de Por Vida</h4><p>Pago único y soporte</p></div>
-      <div class="elal-feat"><div class="icon">👍</div><h4>Fácil de Usar</h4><p>Interfaces simples y rápidas</p></div>
+      <div class="elal-feat">
+        <div class="icon">🧾</div>
+        <h4>Boletas Ilimitadas</h4>
+        <p>Sin límites, fáciles de emitir</p>
+      </div>
+      <div class="elal-feat">
+        <div class="icon">🔓</div>
+        <h4>Licencia de Por Vida</h4>
+        <p>Pago único con soporte incluido</p>
+      </div>
+      <div class="elal-feat">
+        <div class="icon">👍</div>
+        <h4>Fácil de Usar</h4>
+        <p>Interfaz simple y rápida</p>
+      </div>
     </div>
   </section>
 
-  <!-- Green commerce section -->
-  <section class="elal-green">
+  <!-- Sección Streaming y Capacitaciones -->
+  <section id="capacitaciones" class="demo">
+    <div class="container">
+      <h2>Capacitaciones y Eventos en Vivo</h2>
+      <div style="max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); padding: 40px; border-radius: 16px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <div class="icon" style="font-size: 4rem; margin-bottom: 20px;">📺</div>
+          <h3 style="color: #333; margin-bottom: 16px;">Próximos Eventos</h3>
+          <p style="color: #666;">Únete a nuestras charlas y capacitaciones online en vivo</p>
+        </div>
+        <ul style="list-style: none; padding: 0; color: #333;">
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">📅 Martes 15:00 - Gestión de Inventario</li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">📅 Jueves 16:00 - Marketing Digital</li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">📅 Viernes 10:00 - Finanzas para el Comercio</li>
+        </ul>
+        <a href="#register" class="btn btn-primary" style="width: 100%; margin-top: 30px; display: block; text-align: center;">Ver Calendario Completo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enlaces Útiles -->
+  <section id="enlaces" class="elal-green">
     <div class="green-inner">
       <div class="green-copy">
-        <h2>¿En qué tipo de comercios se puede utilizar?</h2>
-        <p>En negocios como almacenes, minimarkets, botillerías, panaderías, y todo tipo de comercios tradicionales.</p>
-        <a class="elal-cta" href="#">VER TIENDAS & COMERCIOS</a>
+        <h2>Enlaces Útiles</h2>
+        <p>Accede rápidamente a los servicios más utilizados por comerciantes:</p>
+        <ul style="list-style: none; padding: 0; margin: 20px 0;">
+          <li style="padding: 8px 0;">🏦 Bancos y pago de cuentas</li>
+          <li style="padding: 8px 0;">📋 SII y trámites fiscales</li>
+          <li style="padding: 8px 0;">🏛️ Servicios municipales</li>
+          <li style="padding: 8px 0;">📱 Proveedores y servicios</li>
+        </ul>
+        <a class="elal-cta" href="#register">PERSONALIZAR MIS ENLACES</a>
       </div>
       <div class="green-image">
-        <img src="{% static 'images/landing/tipo-comercio.jpg' %}" alt="Tipo comercios">
+        <img src="{% static 'images/landing/requeriments.png' %}" alt="Enlaces útiles">
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer id="contacto" class="footer">
     <div class="container">
       <div class="footer-content">
         <div class="footer-section">
-          <h4>Contacto</h4>
-          <p>Email: soporte@chatapp.com</p>
-          <p>Tel: +56 9 1234 5678</p>
+          <h4>Club Almacén</h4>
+          <p>Fortaleciendo a los comerciantes de barrio desde 1999</p>
+          <p>Email: contacto@clubalmacen.com</p>
+          <p>WhatsApp: +56 9 XXXX XXXX</p>
+        </div>
+        <div class="footer-section">
+          <h4>Enlaces Rápidos</h4>
+          <a href="#beneficios">Beneficios</a>
+          <a href="#noticias">Noticias</a>
+          <a href="#kits">Kits POS</a>
+          <a href="#capacitaciones">Capacitaciones</a>
         </div>
         <div class="footer-section">
           <h4>Síguenos</h4>
           <div class="social-links">
             <a href="#" target="_blank">Facebook</a>
-            <a href="#" target="_blank">Twitter</a>
-            <a href="#" target="_blank">LinkedIn</a>
+            <a href="#" target="_blank">Instagram</a>
+            <a href="#" target="_blank">YouTube</a>
           </div>
         </div>
         <div class="footer-section">
@@ -264,130 +315,74 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 Chat Support. Todos los derechos reservados.</p>
+        <p>&copy; 2025 Club Almacén. Todos los derechos reservados.</p>
       </div>
     </div>
   </footer>
 
-    <!-- Carrito popup -->
-    <div class="cart-popup" id="cartPopup">
-      <button id="cartCloseBtn" class="close-btn" aria-label="Cerrar carrito">
-        ✕
-      </button>
-      <h4>Carrito</h4>
-      <ul id="cartItems"></ul>
-    </div>
+  <!-- ==================== MODALES ====================  -->
 
-    <!-- Modal Login -->
-    <div
-      id="loginModal"
-      style="
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        z-index: 3000;
-      "
-    >
-      <form id="loginForm">
-        <h3>Iniciar sesión</h3>
-        <input
-          type="text"
-          id="loginUsername"
-          placeholder="Usuario"
-          required
-        /><br /><br />
-        <input
-          type="email"
-          id="loginEmail"
-          placeholder="Correo electrónico"
-          required
-        /><br /><br />
-        <input
-          type="password"
-          id="loginPassword"
-          placeholder="Contraseña"
-          required
-        />
-        <button type="button"
-          id="showLoginPassword"
-          onclick="togglePasswordVisibility('loginPassword','showLoginPassword')"
-        >👁️</button><br /><br />
+  <!-- Modal Login -->
+  <div class="modal-overlay" id="loginOverlay"></div>
+  <div class="modal" id="loginModal">
+    <form id="loginForm">
+      <h3>Iniciar sesión</h3>
+      <input type="email" id="loginEmail" placeholder="Correo electrónico" required />
+      <div style="display: flex; gap: 8px;">
+        <input type="password" id="loginPassword" placeholder="Contraseña" required style="flex: 1;" />
+        <button type="button" class="password-toggle" id="showLoginPassword" onclick="togglePasswordVisibility('loginPassword')">👁️</button>
+      </div>
+      <button type="submit">Entrar</button>
+      <button type="button" id="closeLogin">Cerrar</button>
+    </form>
+  </div>
 
-        <button type="submit">Entrar</button>
-        <button type="button" id="closeLogin">Cerrar</button>
-      </form>
-    </div>
+  <!-- Modal Registro -->
+  <div class="modal-overlay" id="registerOverlay"></div>
+  <div class="modal" id="registerModal">
+    <form id="registerForm">
+      <h3>Registrarse en Club Almacén</h3>
+      <input type="text" id="registerName" placeholder="Nombre y Apellido" required />
+      <input type="email" id="registerEmail" placeholder="Correo electrónico" required />
+      <input type="tel" id="registerWhatsapp" placeholder="WhatsApp (ej: +56912345678)" required />
+      <select id="registerRole" required>
+        <option value="">Relación con el negocio</option>
+        <option value="dueno">Dueño</option>
+        <option value="conyuge">Cónyuge</option>
+        <option value="hijo">Hijo/a</option>
+        <option value="trabajador">Trabajador</option>
+      </select>
+      <select id="registerType" required>
+        <option value="">Tipo de negocio</option>
+        <option value="almacen">Almacén</option>
+        <option value="minimarket">Minimarket</option>
+        <option value="botilleria">Botillería</option>
+        <option value="panaderia">Panadería</option>
+        <option value="otro">Otro</option>
+      </select>
+      <div style="display: flex; gap: 8px;">
+        <input type="password" id="registerPassword" placeholder="Contraseña" required style="flex: 1;" />
+        <button type="button" class="password-toggle" id="showRegisterPassword" onclick="togglePasswordVisibility('registerPassword', 'registerPasswordConfirm')">👁️</button>
+      </div>
+      <input type="password" id="registerPasswordConfirm" placeholder="Confirmar contraseña" required />
+      <button type="submit">Registrar</button>
+      <button type="button" id="closeRegister">Cerrar</button>
+    </form>
+  </div>
 
-    <!-- Modal Registro -->
-    <div
-      id="registerModal"
-      style="
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        z-index: 3000;
-      "
-    >
-      <form id="registerForm">
-        <h3>Registrarse</h3>
-        <input
-          type="text"
-          id="registerUsername"
-          placeholder="Usuario"
-          required
-        /><br /><br />
-        <input
-          type="email"
-          id="registerEmail"
-          placeholder="Correo electrónico"
-          required
-        /><br /><br />
-        <input
-          type="password"
-          id="registerPassword"
-          placeholder="Contraseña"
-          required
-        /><br /><br />
-        <input
-          type="password"
-          id="registerPasswordConfirm"
-          placeholder="Confirmar contraseña"
-          required
-        /><br /><br />
-        <button type="button"
-          id="showRegisterPassword"
-          onclick="togglePasswordVisibility('registerPassword', 'registerPasswordConfirm', 'showRegisterPassword')"
-        >👁️</button><br /><br />
-        <button type="submit">Registrar</button>
-        <button type="button" id="closeRegister">Cerrar</button>
-      </form>
-    </div>
-
-    <!-- Chat popup overlay -->
-    <div id="chatOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:2600;align-items:center;justify-content:center;">
-      <!-- Chat container -->
-      <div class="chat-container" id="chatContainer" role="dialog" aria-label="Chat" style="position:relative;display:flex;flex-direction:column;min-width:320px;max-width:420px;">
-        <button id="close-chat" class="close-btn" style="position:absolute;top:8px;right:8px;">✖</button>
+  <!-- Chat Popup -->
+  <div id="chatOverlay">
+    <div class="chat-container" id="chatContainer" role="dialog" aria-label="Chat">
+      <button id="close-chat">✖</button>
+      
       <div class="chat-header">
-        Chat Global
-        <div id="datetime" style="font-size:12px;opacity:.9;margin-top:4px"></div>
+        Chat Comunidad
+        <div id="datetime"></div>
       </div>
 
       <div class="tabs" id="tabs">
         <div class="tab active" data-tab="nacional">Nacional</div>
-        <div class="tab" data-tab="local">Local</div>
+        <div class="tab" data-tab="regional">Regional</div>
         <div class="tab" data-tab="soporte">Soporte</div>
       </div>
 
@@ -397,23 +392,22 @@
         <input type="text" id="msgInput" placeholder="Escribe un mensaje..." />
         <button id="sendBtn">Enviar</button>
       </div>
-
-      </div>
     </div>
-    <!-- Chat toggle button -->
-    <button id="toggle-chat" class="chat-toggle" style="position:fixed;left:10px;bottom:10px;z-index:2500;padding:8px 10px;border-radius:6px;border:none;background:#0078ff;color:#fff;">Chat</button>
+  </div>
 
-    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+  <!-- Chat Toggle Button -->
+  <button id="toggle-chat" class="chat-toggle">Chat</button>
 
-    <!-- Variable global para el username -->
-    <script>
-      window.currentUsername = "{% if user.is_authenticated %}{{ user.username }}{% endif %}";
-    </script>
+  <!-- CSRF Form -->
+  <form id="csrf-form" style="display: none">{% csrf_token %}</form>
 
-  <!-- Scripts externos -->
+  <!-- Variable global -->
+  <script>
+    window.currentUsername = "{% if user.is_authenticated %}{{ user.username }}{% endif %}";
+  </script>
+
+  <!-- Scripts -->
   <script src="{% static 'js/main.js' %}"></script>
   <script src="{% static 'js/chat.js' %}"></script>
-  <script src="{% static 'js/landing.js' %}"></script>
-  <script src="{% static 'js/elalmacen.js' %}"></script>
-  </body>
+</body>
 </html>

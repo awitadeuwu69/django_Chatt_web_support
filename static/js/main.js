@@ -4,72 +4,120 @@
 
 /* Leer cookie */
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === name + "=") {
-          cookieValue = decodeURIComponent(
-            cookie.substring(name.length + 1)
-          );
-          break;
-        }
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(
+          cookie.substring(name.length + 1)
+        );
+        break;
       }
     }
-    return cookieValue;
   }
+  return cookieValue;
+}
+
+/* CSRF token */
+const _csrfInput = document.querySelector(
+  'input[name="csrfmiddlewaretoken"]'
+);
+let csrftoken =
+  getCookie("csrftoken") || (_csrfInput ? _csrfInput.value : null);
+
+if (!csrftoken) {
+  setTimeout(() => {
+    try {
+      const _delayedInput = document.querySelector(
+        'input[name="csrfmiddlewaretoken"]'
+      );
+      csrftoken =
+        getCookie("csrftoken") || (_delayedInput ? _delayedInput.value : null);
+      console.log("csrf token (delayed):", csrftoken);
+    } catch (err) {
+      console.warn("Error while trying to read delayed CSRF token:", err);
+    }
+  }, 50);
+}
+
+function getCSRFToken() {
+  return csrftoken || document.querySelector("[name=csrfmiddlewaretoken]")?.value;
+}
+
+/* Escape HTML */
+function escapeHtml(unsafe) {
+  if (!unsafe) return '';
+  return String(unsafe).replace(/[&<>"']/g, function (m) {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    }[m];
+  });
+}
+
+// Exportar funciones globales
+window.getCSRFToken = getCSRFToken;
+window.escapeHtml = escapeHtml;
+
+/* ========================================
+   MENÚ HAMBURGUESA - CORREGIDO
+======================================== */
+document.addEventListener('DOMContentLoaded', function() {
   
-  /* CSRF token */
-  const _csrfInput = document.querySelector(
-    'input[name="csrfmiddlewaretoken"]'
-  );
-  let csrftoken =
-    getCookie("csrftoken") || (_csrfInput ? _csrfInput.value : null);
-  
-  if (!csrftoken) {
-    setTimeout(() => {
-      try {
-        const _delayedInput = document.querySelector(
-          'input[name="csrfmiddlewaretoken"]'
-        );
-        csrftoken =
-          getCookie("csrftoken") || (_delayedInput ? _delayedInput.value : null);
-        console.log("csrf token (delayed):", csrftoken);
-      } catch (err) {
-        console.warn("Error while trying to read delayed CSRF token:", err);
-      }
-    }, 50);
-  }
-  
-  function getCSRFToken() {
-    return csrftoken || document.querySelector("[name=csrfmiddlewaretoken]")?.value;
-  }
-  
-  /* Escape HTML */
-  function escapeHtml(unsafe) {
-    return unsafe.replace(/[&<>"']/g, function (m) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;",
-      }[m];
-    });
-  }
-  
-  /* ========================================
-     MENÚ
-  ======================================== */
   const menuBtn = document.getElementById("menuBtn");
   const menuDropdown = document.getElementById("menuDropdown");
-  if (menuBtn) {
-    menuBtn.addEventListener("click", () => {
+  const cartBtn = document.getElementById("cartBtn");
+  const cartPopup = document.getElementById("cartPopup");
+  const cartCloseBtn = document.getElementById("cartCloseBtn");
+
+  // Toggle menú hamburguesa
+  if (menuBtn && menuDropdown) {
+    menuBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
       menuDropdown.classList.toggle("active");
+      // Cerrar carrito si está abierto
+      if (cartPopup) {
+        cartPopup.classList.remove("active");
+      }
     });
   }
-  
+
+  // Toggle carrito
+  if (cartBtn && cartPopup) {
+    cartBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      cartPopup.classList.toggle("active");
+      loadCart();
+      // Cerrar menú si está abierto
+      if (menuDropdown) {
+        menuDropdown.classList.remove("active");
+      }
+    });
+  }
+
+  // Cerrar carrito con botón X
+  if (cartCloseBtn && cartPopup) {
+    cartCloseBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      cartPopup.classList.remove("active");
+    });
+  }
+
+  // Cerrar menú y carrito al hacer clic fuera
+  document.addEventListener("click", function(e) {
+    if (menuDropdown && menuBtn && !menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+      menuDropdown.classList.remove("active");
+    }
+    if (cartPopup && cartBtn && !cartBtn.contains(e.target) && !cartPopup.contains(e.target)) {
+      cartPopup.classList.remove("active");
+    }
+  });
+
   /* ========================================
      CARRITO
   ======================================== */
@@ -83,267 +131,339 @@ function getCookie(name) {
         },
         body: JSON.stringify({ product_id: productId, cantidad: 1 }),
       });
+      
       if (res.status === 401) {
         const loginModal = document.getElementById("loginModal");
+        const loginOverlay = document.getElementById("loginOverlay");
         if (loginModal) loginModal.style.display = "block";
+        if (loginOverlay) loginOverlay.style.display = "block";
         alert("Debes iniciar sesión para agregar al carrito");
         return;
       }
+      
       const data = await res.json();
       if (res.ok && data.success) {
-        alert("Producto agregado al carrito");
+        alert("Producto agregado al carrito ✅");
         await loadCart();
       } else {
         alert(data.error || "Error al agregar al carrito");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error adding to cart:", err);
+      alert("Error de conexión al agregar producto");
     }
   }
-  
+
   async function loadCart() {
     try {
       const res = await fetch("/cart/");
+      
       if (res.status === 401) {
-        const loginModal = document.getElementById("loginModal");
-        if (loginModal) loginModal.style.display = "block";
+        const ul = document.getElementById("cartItems");
+        if (ul) {
+          ul.innerHTML = '<li style="text-align: center; padding: 20px;">Inicia sesión para ver tu carrito</li>';
+        }
         return;
       }
+      
       const data = await res.json();
       const ul = document.getElementById("cartItems");
+      
+      if (!ul) return;
+      
       ul.innerHTML = "";
+      
+      if (!data.items || data.items.length === 0) {
+        ul.innerHTML = '<li style="text-align: center; padding: 20px; color: #999;">Carrito vacío</li>';
+        return;
+      }
+      
       data.items.forEach((item) => {
         const li = document.createElement("li");
         li.textContent = `${item.nombre} (${item.cantidad}) - $${item.subtotal}`;
         ul.appendChild(li);
       });
+      
+      // Agregar total si existe
+      if (data.total) {
+        const totalLi = document.createElement("li");
+        totalLi.style.fontWeight = "bold";
+        totalLi.style.borderTop = "2px solid #ddd";
+        totalLi.style.marginTop = "10px";
+        totalLi.style.paddingTop = "10px";
+        totalLi.textContent = `Total: $${data.total}`;
+        ul.appendChild(totalLi);
+      }
     } catch (err) {
-      console.error("Error loading cart", err);
+      console.error("Error loading cart:", err);
+      const ul = document.getElementById("cartItems");
+      if (ul) {
+        ul.innerHTML = '<li style="color: red;">Error al cargar carrito</li>';
+      }
     }
   }
-  
+
+  // Event listeners para botones de agregar al carrito
   document.querySelectorAll(".add-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      const id = e.target.closest(".product-card").dataset.id;
-      addToCart(id);
+      const productCard = e.target.closest(".product-card");
+      if (productCard) {
+        const id = productCard.dataset.id;
+        if (id) {
+          addToCart(id);
+        }
+      }
     });
   });
-  
-  const cartBtn = document.getElementById("cartBtn");
-  if (cartBtn) {
-    cartBtn.addEventListener("click", () => {
-      document.getElementById("cartPopup").classList.toggle("active");
-      loadCart();
-    });
-  }
-  
-  const cartCloseBtn = document.getElementById("cartCloseBtn");
-  if (cartCloseBtn) {
-    cartCloseBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      document.getElementById("cartPopup").classList.remove("active");
-    });
-  }
-  
+
   /* ========================================
-     LOGIN Y REGISTRO
+     LOGIN Y REGISTRO - MODALES
   ======================================== */
-  document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-    const loginModal = document.getElementById("loginModal");
-    const registerModal = document.getElementById("registerModal");
-  
-    // LOGIN
-    if (loginForm) {
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const username = document.getElementById("loginUsername").value;
-        const email = document.getElementById("loginEmail").value;
-        const password = document.getElementById("loginPassword").value;
-  
-        try {
-          const response = await fetch("/login/", {
-            method: "POST",
-            headers: { 
-              "Content-Type": "application/json",
-              "X-CSRFToken": getCSRFToken()
-            },
-            body: JSON.stringify({ username, email, password }),
-          });
-  
-          const data = await response.json();
-          if (data.success) {
-            alert("Inicio de sesión exitoso ✅");
-            location.reload();
-          } else {
-            alert(data.error || "Error al iniciar sesión");
-          }
-        } catch (err) {
-          console.error(err);
-          alert("Error de conexión");
-        }
-      });
-    }
-  
-    // REGISTRO
-    if (registerForm) {
-      registerForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const username = document.getElementById("registerUsername").value;
-        const email = document.getElementById("registerEmail").value;
-        const password = document.getElementById("registerPassword").value;
-        const passwordConfirm = document.getElementById(
-          "registerPasswordConfirm"
-        ).value;
-  
-        if (password !== passwordConfirm) {
-          alert("Las contraseñas no coinciden");
-          return;
-        }
-        if (password.length < 6 && !password.includes("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~") && !password.includes("0-9")) {
-          alert("La contraseña debe tener al menos 6 caracteres, contener al menos un carácter especial y un número");
-          return;
-        }
-        if (!email.includes("@gmail.com")) {
-          alert("El correo electrónico no es válido(debe contener @gmail.com)");
-          return;
-        }
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  const loginModal = document.getElementById("loginModal");
+  const registerModal = document.getElementById("registerModal");
+  const loginOverlay = document.getElementById("loginOverlay");
+  const registerOverlay = document.getElementById("registerOverlay");
+
+  // LOGIN FORM
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const username = document.getElementById("loginUsername")?.value || email.split('@')[0];
+
+      try {
+        const response = await fetch("/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSON.stringify({ username, email, password }),
+        });
+
+        const data = await response.json();
         
-  
-        try {
-          const response = await fetch("/register/", {
-            method: "POST",
-            headers: { 
-              "Content-Type": "application/json",
-              "X-CSRFToken": getCSRFToken()
-            },
-            body: JSON.stringify({ username, email, password }),
-          });
-  
-          const data = await response.json();
-          if (data.success) {
-            try {
-              const loginRes = await fetch("/login/", {
-                method: "POST",
-                headers: { 
-                  "Content-Type": "application/json",
-                  "X-CSRFToken": getCSRFToken()
-                },
-                body: JSON.stringify({ username, email, password }),
-              });
-              const loginData = await loginRes.json();
-              if (loginData.success) {
-                alert("Registro y login exitoso ✅");
-                location.reload();
-              } else {
-                alert("Registro exitoso. Por favor inicia sesión.");
-                if (registerModal) registerModal.style.display = "none";
-              }
-            } catch (err) {
-              console.error("Auto-login failed", err);
+        if (data.success) {
+          alert("Inicio de sesión exitoso ✅");
+          location.reload();
+        } else {
+          alert(data.error || "Error al iniciar sesión");
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        alert("Error de conexión al iniciar sesión");
+      }
+    });
+  }
+
+  // REGISTRO FORM
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById("registerName")?.value;
+      const email = document.getElementById("registerEmail").value;
+      const whatsapp = document.getElementById("registerWhatsapp")?.value;
+      const role = document.getElementById("registerRole")?.value;
+      const businessType = document.getElementById("registerType")?.value;
+      const password = document.getElementById("registerPassword").value;
+      const passwordConfirm = document.getElementById("registerPasswordConfirm").value;
+      const username = document.getElementById("registerUsername")?.value || email.split('@')[0];
+
+      // Validaciones
+      if (password !== passwordConfirm) {
+        alert("Las contraseñas no coinciden");
+        return;
+      }
+      
+      if (password.length < 6) {
+        alert("La contraseña debe tener al menos 6 caracteres");
+        return;
+      }
+
+      try {
+        const response = await fetch("/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken(),
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+            name,
+            whatsapp,
+            role,
+            business_type: businessType
+          }),
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          // Intentar login automático
+          try {
+            const loginRes = await fetch("/login/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+              },
+              body: JSON.stringify({ username, email, password }),
+            });
+            
+            const loginData = await loginRes.json();
+            
+            if (loginData.success) {
+              alert("Registro exitoso ✅ Bienvenido a Club Almacén");
+              location.reload();
+            } else {
               alert("Registro exitoso. Por favor inicia sesión.");
               if (registerModal) registerModal.style.display = "none";
+              if (registerOverlay) registerOverlay.style.display = "none";
+              if (loginModal) loginModal.style.display = "block";
+              if (loginOverlay) loginOverlay.style.display = "block";
             }
-          } else {
-            alert(data.error || "Error al registrarse");
+          } catch (err) {
+            console.error("Auto-login failed:", err);
+            alert("Registro exitoso. Por favor inicia sesión.");
+            if (registerModal) registerModal.style.display = "none";
+            if (registerOverlay) registerOverlay.style.display = "none";
           }
-        } catch (err) {
-          console.error(err);
-          alert("Error de conexión");
+        } else {
+          alert(data.error || "Error al registrarse");
         }
-      });
-    }
+      } catch (err) {
+        console.error("Registration error:", err);
+        alert("Error de conexión al registrarse");
+      }
+    });
+  }
+
+  /* ========================================
+     TOGGLE PASSWORD VISIBILITY
+  ======================================== */
+  function togglePasswordVisibility(...args) {
+    if (args.length < 1) return;
     
-// mostrar contra
-function togglePasswordVisibility() {
-  // Accept multiple input IDs and a final buttonId as the last argument.
-  const args = Array.from(arguments);
-  if (args.length < 2) return; // need at least one input id and a button id
-  const buttonId = args[args.length - 1];
-  const inputIds = args.slice(0, -1);
-  const button = document.getElementById(buttonId);
-  if (!button) return;
-
-  // Determine current state based on first existing input
-  let firstInput = null;
-  for (const id of inputIds) {
-    const el = document.getElementById(id);
-    if (el) { firstInput = el; break; }
-  }
-  if (!firstInput) return;
-
-  const showing = firstInput.type !== 'password';
-  if (showing) {
-    // switch to password
-    inputIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.type = 'password';
+    args.forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
     });
-    button.textContent = '👁️';
-    button.setAttribute('aria-label', 'Mostrar contraseña');
-  } else {
-    // switch to text
-    inputIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.type = 'text';
-    });
-    button.textContent = '✖️';
-    button.setAttribute('aria-label', 'Ocultar contraseña');
   }
-}
 
-// Expose function globally so inline onclick handlers can call it
-try {
+  // Exportar función globalmente
   window.togglePasswordVisibility = togglePasswordVisibility;
-  console.log('togglePasswordVisibility exported to window');
-} catch (e) {
-  // ignore if window not defined in this environment
-}
 
+  /* ========================================
+     BOTONES DE MODALES
+  ======================================== */
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtn");
+  const closeLogin = document.getElementById("closeLogin");
+  const closeRegister = document.getElementById("closeRegister");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  
-    // MODALES - BOTONES
-    const loginBtn = document.getElementById("loginBtn");
-    const registerBtn = document.getElementById("registerBtn");
-    const closeLogin = document.getElementById("closeLogin");
-    const closeRegister = document.getElementById("closeRegister");
-    const logoutBtn = document.getElementById("logoutBtn");
-  
-    if (loginBtn)
-      loginBtn.addEventListener(
-        "click",
-        () => (loginModal.style.display = "block")
-      );
-    if (registerBtn)
-      registerBtn.addEventListener(
-        "click",
-        () => (registerModal.style.display = "block")
-      );
-    if (closeLogin)
-      closeLogin.addEventListener(
-        "click",
-        () => (loginModal.style.display = "none")
-      );
-    if (closeRegister)
-      closeRegister.addEventListener(
-        "click",
-        () => (registerModal.style.display = "none")
-      );
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        try {
-          await fetch("/logout/", { 
-            method: "POST",
-            headers: {
-              "X-CSRFToken": getCSRFToken()
-            }
-          });
+  // Abrir modal de login
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      if (loginModal) loginModal.style.display = "block";
+      if (loginOverlay) loginOverlay.style.display = "block";
+      if (menuDropdown) menuDropdown.classList.remove("active");
+    });
+  }
+
+  // Abrir modal de registro
+  if (registerBtn) {
+    registerBtn.addEventListener("click", () => {
+      if (registerModal) registerModal.style.display = "block";
+      if (registerOverlay) registerOverlay.style.display = "block";
+      if (menuDropdown) menuDropdown.classList.remove("active");
+    });
+  }
+
+  // Cerrar modal de login
+  if (closeLogin) {
+    closeLogin.addEventListener("click", () => {
+      if (loginModal) loginModal.style.display = "none";
+      if (loginOverlay) loginOverlay.style.display = "none";
+    });
+  }
+
+  // Cerrar modal de registro
+  if (closeRegister) {
+    closeRegister.addEventListener("click", () => {
+      if (registerModal) registerModal.style.display = "none";
+      if (registerOverlay) registerOverlay.style.display = "none";
+    });
+  }
+
+  // Cerrar modales al hacer clic en overlay
+  if (loginOverlay) {
+    loginOverlay.addEventListener("click", () => {
+      if (loginModal) loginModal.style.display = "none";
+      loginOverlay.style.display = "none";
+    });
+  }
+
+  if (registerOverlay) {
+    registerOverlay.addEventListener("click", () => {
+      if (registerModal) registerModal.style.display = "none";
+      registerOverlay.style.display = "none";
+    });
+  }
+
+  // Logout
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      if (!confirm("¿Estás seguro de cerrar sesión?")) return;
+      
+      try {
+        const response = await fetch("/logout/", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCSRFToken(),
+          },
+        });
+        
+        if (response.ok) {
+          alert("Sesión cerrada exitosamente");
           location.reload();
-        } catch (err) {
-          console.error(err);
+        } else {
           alert("Error al cerrar sesión");
         }
-      });
-    }
+      } catch (err) {
+        console.error("Logout error:", err);
+        alert("Error de conexión al cerrar sesión");
+      }
+    });
+  }
+
+  /* ========================================
+     SMOOTH SCROLL
+  ======================================== */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      
+      e.preventDefault();
+      const target = document.querySelector(href);
+      
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
   });
+
+});
