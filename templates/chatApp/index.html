@@ -2,16 +2,18 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="utf-8" />
-    <title>Web con Login, Productos y Carrito</title>
+  <meta charset="utf-8" />
+  <title>Software de Chat Support - Solución Digital para tu Negocio</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link
       rel="icon"
       type="image/x-icon"
       href="{% static 'images/icon/favicon.png' %}"
     />
-    <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/chat.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/elalmacen.css' %}" />
   </head>
   <body>
     <!-- Topbar -->
@@ -31,57 +33,241 @@
       </div>
     </div>
 
-    <!-- === PRODUCTOS FICTICIOS === -->
-    <div class="product-grid">
-      <div class="product-card" data-id="1">
-        <img src="{% static 'images/products/mouse.jpg' %}" alt="Mouse gamer" />
-        <h4>Mouse Gamer</h4>
-        <p>$19.990</p>
-        <button class="add-btn">Agregar al carrito</button>
-      </div>
-      <div class="product-card" data-id="2">
-        <img
-          src="{% static 'images/products/teclado.jpg' %}"
-          alt="Teclado mecánico"
-        />
-        <h4>Teclado Mecánico</h4>
-        <p>$34.990</p>
-        <button class="add-btn">Agregar al carrito</button>
-      </div>
-      <div class="product-card" data-id="3">
-        <img
-          src="{% static 'images/products/monitor.jpg' %}"
-          alt="Monitor 144Hz"
-        />
-        <h4>Monitor 144Hz</h4>
-        <p>$179.990</p>
-        <button class="add-btn">Agregar al carrito</button>
-      </div>
-      <div class="product-card" data-id="4">
-        <img
-          src="{% static 'images/products/audifonos.jpg' %}"
-          alt="Audífonos"
-        />
-        <h4>Audífonos</h4>
-        <p>$24.990</p>
-        <button class="add-btn">Agregar al carrito</button>
-      </div>
-      <div class="product-card" data-id="5">
-        <img src="{% static 'images/products/silla.jpg' %}" alt="Silla gamer" />
-        <h4>Silla Gamer</h4>
-        <p>$99.990</p>
-        <button class="add-btn">Agregar al carrito</button>
-      </div>
-      <div class="product-card" data-id="6">
-        <img
-          src="{% static 'images/products/gpu.jpg' %}"
-          alt="Tarjeta gráfica"
-        />
-        <h4>Tarjeta Gráfica</h4>
-        <p>$299.990</p>
-        <button class="add-btn">Agregar al carrito</button>
+    <!-- El Almacén top utility bar -->
+    <div class="elal-topbar">
+      <div class="container">
+        <div>Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.</div>
+        <div class="top-actions">
+          <a class="btn-cta btn-demo" href="#">Descargar Demo Gratis</a>
+          <a class="btn-cta btn-quote" href="#">Cotizar</a>
+          <a class="btn-cta btn-contact" href="#">Contáctenos</a>
+        </div>
       </div>
     </div>
+
+    <!-- Blue navigation -->
+    <nav class="elal-nav">
+      <div class="nav-inner">
+        <a href="#" class="active">INICIO</a>
+        <a href="#">DESCRIPCIÓN</a>
+        <a href="#">FUNCIONES</a>
+        <a href="#">IMAGENES</a>
+        <a href="#">VIDEOS</a>
+        <a href="#">DESCARGAR GRATIS</a>
+        <a href="#">AYUDA</a>
+        <a href="#">CONTACTO</a>
+      </div>
+    </nav>
+
+  <!-- Landing content (merged) -->
+  <section class="hero">
+    <div class="container">
+      <h1>Software de Chat Support</h1>
+      <p class="lead">Una solución digital moderna para la atención al cliente de tu negocio</p>
+      <div class="hero-buttons">
+        <a href="#features" class="btn btn-primary">Ver Características</a>
+        <a href="#demo" class="btn btn-secondary">Solicitar Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero large visual similar to El Almacen -->
+  <section class="elal-hero-large">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <h2 style="color:#fff; font-size:2.2rem; margin-bottom:12px">SOFTWARE DE PUNTO DE VENTA</h2>
+        <p style="color:#e6eefb; font-size:1.05rem">Para negocios, comercios & tiendas</p>
+      </div>
+      <div class="hero-box">
+        <img src="{% static 'images/landing/box-pos.png' %}" alt="Caja POS">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2>¿Por qué elegir nuestro Chat Support?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon">💬</div>
+          <h3>Chat en Tiempo Real</h3>
+          <p>Comunicación instantánea con tus clientes, sin demoras ni esperas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔒</div>
+          <h3>Seguro y Confiable</h3>
+          <p>Tus conversaciones están protegidas y son completamente privadas.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📱</div>
+          <h3>Multiplataforma</h3>
+          <p>Accede desde cualquier dispositivo, en cualquier momento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section id="uses" class="uses">
+    <div class="container">
+      <h2>¿En qué negocios se puede utilizar?</h2>
+      <div class="uses-grid">
+        <div class="use-case">
+          <h3>Comercios</h3>
+          <ul>
+            <li>Tiendas online</li>
+            <li>Retail</li>
+            <li>Supermercados</li>
+          </ul>
+        </div>
+        <div class="use-case">
+          <h3>Servicios</h3>
+          <ul>
+            <li>Consultoría</li>
+            <li>Soporte técnico</li>
+            <li>Atención al cliente</li>
+          </ul>
+        </div>
+        <div class="use-case">
+          <h3>Profesionales</h3>
+          <ul>
+            <li>Despachos</li>
+            <li>Clínicas</li>
+            <li>Oficinas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Requirements Section -->
+  <section id="requirements" class="requirements">
+    <div class="container">
+      <h2>¿Qué necesitas para comenzar?</h2>
+      <div class="requirements-content">
+        <div class="requirements-text">
+          <p>Solo necesitas:</p>
+          <ul>
+            <li>Una conexión a internet</li>
+            <li>Un navegador web moderno</li>
+            <li>Una cuenta en nuestro sistema</li>
+          </ul>
+        </div>
+        <div class="requirements-image">
+          <img src="{% static 'images/requirements.jpg' %}" alt="Requisitos del sistema">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Section -->
+  <section id="demo" class="demo">
+    <div class="container">
+      <h2>Solicita una Demo</h2>
+      <form class="demo-form">
+        <div class="form-group">
+          <input type="text" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" placeholder="Teléfono">
+        </div>
+        <div class="form-group">
+          <select required>
+            <option value="">Tipo de negocio</option>
+            <option value="retail">Retail</option>
+            <option value="services">Servicios</option>
+            <option value="professional">Profesional</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Solicitar Demo</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- El Almacén imported sections -->
+  <section class="elal-section">
+    <div class="elal-container">
+      <h2>Digitaliza tu Almacén 2025</h2>
+      <p>Conoce nuestros KIT de Punto de Venta y los beneficios del convenio de Club Almacén y Almacenes de Chile.</p>
+
+      <div class="elal-gallery" aria-label="Kits">
+        <div class="elal-card"><img src="{% static 'images/landing/kit-pos-sercotec-200-1024x1024.png' %}" alt="kit pos"><p>Kit POS Sercotec</p></div>
+        <div class="elal-card"><img src="{% static 'images/landing/sercotec.png' %}" alt="sercotec"><p>Sercotec</p></div>
+        <div class="elal-card"><img src="{% static 'images/landing/aio-ach.png' %}" alt="aio"><p>Computador AIO</p></div>
+      </div>
+
+      <p class="elal-footer-small">¿Ganaste el concurso ALMACENES DE CHILE? Solicita una cotización para tu kit.</p>
+    </div>
+  </section>
+  <!-- Boleta Electrónica -->
+  <section class="elal-boleta">
+    <div class="boleta-inner">
+      <div class="boleta-img">
+        <img src="{% static 'images/landing/boleta-pos.png' %}" alt="Boleta Electrónica">
+      </div>
+      <div class="boleta-content">
+        <h2>Boleta Electrónica de Club Almacén</h2>
+        <p>Un servicio de Pago a un precio conveniente, que se renueva anualmente. Imprime boletas electrónicas con el software El Almacén, aún cuando no tengas Internet. Al volver la Internet, conéctate directamente con el Sii y evita costos de intermediarios.</p>
+        <a class="btn-more" href="#">MAS INFORMACION</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features row -->
+  <section class="elal-features">
+    <div class="elal-feat-grid">
+      <div class="elal-feat"><div class="icon">🧾</div><h4>Boletas Electrónicas</h4><p>Ilimitadas y sencillas</p></div>
+      <div class="elal-feat"><div class="icon">🔐</div><h4>Licencia de Por Vida</h4><p>Pago único y soporte</p></div>
+      <div class="elal-feat"><div class="icon">👍</div><h4>Fácil de Usar</h4><p>Interfaces simples y rápidas</p></div>
+    </div>
+  </section>
+
+  <!-- Green commerce section -->
+  <section class="elal-green">
+    <div class="green-inner">
+      <div class="green-copy">
+        <h2>¿En qué tipo de comercios se puede utilizar?</h2>
+        <p>En negocios como almacenes, minimarkets, botillerías, panaderías, y todo tipo de comercios tradicionales.</p>
+        <a class="elal-cta" href="#">VER TIENDAS & COMERCIOS</a>
+      </div>
+      <div class="green-image">
+        <img src="{% static 'images/landing/tipo-comercio.jpg' %}" alt="Tipo comercios">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Contacto</h4>
+          <p>Email: soporte@chatapp.com</p>
+          <p>Tel: +56 9 1234 5678</p>
+        </div>
+        <div class="footer-section">
+          <h4>Síguenos</h4>
+          <div class="social-links">
+            <a href="#" target="_blank">Facebook</a>
+            <a href="#" target="_blank">Twitter</a>
+            <a href="#" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <a href="#">Términos y condiciones</a>
+          <a href="#">Política de privacidad</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Chat Support. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
 
     <!-- Carrito popup -->
     <div class="cart-popup" id="cartPopup">
@@ -224,8 +410,10 @@
       window.currentUsername = "{% if user.is_authenticated %}{{ user.username }}{% endif %}";
     </script>
 
-    <!-- Scripts externos -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/chat.js' %}"></script>
+  <!-- Scripts externos -->
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/chat.js' %}"></script>
+  <script src="{% static 'js/landing.js' %}"></script>
+  <script src="{% static 'js/elalmacen.js' %}"></script>
   </body>
 </html>
