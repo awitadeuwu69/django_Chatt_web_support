@@ -32,7 +32,7 @@
             📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
           </div>
           <div class="top-actions">
-            <a class="btn-cta btn-demo" href="#demo">Descargar Demo Gratis</a>
+            <a class="btn-cta btn-demo" href="{% url 'chatApp:download' %}" target="_blank">Descargar Demo Gratis</a>
             <a class="btn-cta btn-quote" href="#beneficios">Cotizar</a>
             <a class="btn-cta btn-contact" href="#contacto">Contáctenos</a>
           </div>
@@ -89,7 +89,7 @@
         </p>
         <div class="hero-buttons">
           <a href="#beneficios" class="btn btn-primary">Ver Beneficios</a>
-          <a href="#register" class="btn btn-secondary">Unirme Ahora</a>
+          <a href="{% url 'chatApp:catalog' %}" target="_blank" class="btn btn-secondary">Unirme Ahora</a>
         </div>
       </div>
     </section>

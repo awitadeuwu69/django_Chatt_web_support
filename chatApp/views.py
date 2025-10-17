@@ -31,6 +31,13 @@ def chat_view(request):
     products = Product.objects.all()
     return render(request, 'chatApp/index.html', {'avatars': avatars, 'products': products})
 
+# --- Vista del catálogo ---
+def catalog_view(request):
+    return render(request, 'chatApp/catalog.html')
+
+# --- Vista de descarga ---
+def download_view(request):
+    return render(request, 'chatApp/download.html')
 
 # --- API de mensajes ---
 @require_http_methods(["GET", "POST"])
