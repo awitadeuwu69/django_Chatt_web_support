@@ -32,7 +32,12 @@
             📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
           </div>
           <div class="top-actions">
-            <a class="btn-cta btn-demo" href="{% url 'chatApp:download' %}" target="_blank">Descargar Demo Gratis</a>
+            <a
+              class="btn-cta btn-demo"
+              href="{% url 'chatApp:download' %}"
+              target="_blank"
+              >Descargar Demo Gratis</a
+            >
             <a class="btn-cta btn-quote" href="#beneficios">Cotizar</a>
             <a class="btn-cta btn-contact" href="#contacto">Contáctenos</a>
           </div>
@@ -89,7 +94,12 @@
         </p>
         <div class="hero-buttons">
           <a href="#beneficios" class="btn btn-primary">Ver Beneficios</a>
-          <a href="{% url 'chatApp:catalog' %}" target="_blank" class="btn btn-secondary">Unirme Ahora</a>
+          <a
+            href="{% url 'chatApp:catalog' %}"
+            target="_blank"
+            class="btn btn-secondary"
+            >Unirme Ahora</a
+          >
         </div>
       </div>
     </section>
@@ -223,26 +233,30 @@
 
         <!-- Categorías Horizontales -->
         <div class="categories-horizontal">
-          <div class="category-item">
-            <span class="icon">💻</span>
-            <h4>Kits POS</h4>
-          </div>
-          <div class="category-item">
-            <span class="icon">🧾</span>
-            <h4>Boleta Electrónica</h4>
-          </div>
-          <div class="category-item">
-            <span class="icon">🖥️</span>
-            <h4>Hardware</h4>
-          </div>
-          <div class="category-item">
-            <span class="icon">⚙️</span>
-            <h4>Software</h4>
-          </div>
-          <div class="category-item">
-            <span class="icon">🎓</span>
-            <h4>Capacitación</h4>
-          </div>
+            <div class="category-item">
+              <span class="icon">💻</span>
+              <h4>Kits POS</h4>
+            </div>
+          </a>
+
+            <div class="category-item">
+              <span class="icon">🖥️</span>
+              <h4>Hardware</h4>
+            </div>
+          </a>
+
+          <a href="{% url 'chatApp:download' %}" class="category-link">
+            <div class="category-item">
+              <span>⚙️</span>
+              <h4>Software</h4>
+            </div>
+          </a>
+
+            <div class="category-item">
+              <span class="icon">🎓</span>
+              <h4>Capacitación</h4>
+            </div>
+          </a>
         </div>
 
         <!-- Galería de Kits - Carrusel -->
