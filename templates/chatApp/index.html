@@ -389,53 +389,104 @@
     </section>
 
     <!-- Seccion Streaming y Capacitaciones (requiere inicio de sesi贸n) -->
-  <section id="capacitaciones" class="demo">
-    <div class="container">
-      <h2>Capacitaciones y Eventos en Vivo</h2>
+    <section id="capacitaciones" class="demo">
+      <div class="container">
+        <h2>Capacitaciones y Eventos en Vivo</h2>
 
-      {% if user.is_authenticated %}
-      <div style="max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.95); padding: 40px; border-radius: 16px;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <div class="icon" style="font-size: 4rem; margin-bottom: 20px;"></div>
-          <h3 style="color: #333; margin-bottom: 16px;">Proximos Eventos</h3>
-          <p style="color: #666;">unete a nuestras charlas y capacitaciones online en vivo</p>
+        {% if user.is_authenticated %}
+        <div
+          style="
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+          "
+        >
+          <div style="text-align: center; margin-bottom: 30px">
+            <div
+              class="icon"
+              style="font-size: 4rem; margin-bottom: 20px"
+            ></div>
+            <h3 style="color: #333; margin-bottom: 16px">Proximos Eventos</h3>
+            <p style="color: #666">
+              unete a nuestras charlas y capacitaciones online en vivo
+            </p>
+          </div>
+          <ul style="list-style: none; padding: 0; color: #333">
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee">
+              Martes 15:00 - Gestion de Inventario
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee">
+              Jueves 16:00 - Marketing Digital
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #eee">
+              Viernes 10:00 - Finanzas para el Comercio
+            </li>
+          </ul>
+          <a
+            href="#"
+            class="btn btn-primary"
+            style="
+              width: 100%;
+              margin-top: 30px;
+              display: block;
+              text-align: center;
+            "
+            >Ver Calendario Completo</a
+          >
         </div>
-        <ul style="list-style: none; padding: 0; color: #333;">
-          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">Martes 15:00 - Gestion de Inventario</li>
-          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">Jueves 16:00 - Marketing Digital</li>
-          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">Viernes 10:00 - Finanzas para el Comercio</li>
-        </ul>
-        <a href="#" class="btn btn-primary" style="width: 100%; margin-top: 30px; display: block; text-align: center;">Ver Calendario Completo</a>
-      </div>
-      {% else %}
-      <div style="max-width: 720px; margin: 0 auto; background: rgba(255,255,255,0.95); padding: 30px; border-radius: 12px; text-align:center;">
-        <div style="font-size: 3rem; margin-bottom: 12px;">🔐</div>
-        <h3 style="color: #333; margin-bottom: 8px;">Acceso restringido</h3>
-        <p style="color: #666; margin-bottom: 20px;">Debes iniciar sesion para ver las capacitaciones y eventos en vivo.</p>
-        <button id="loginRequiredBtn" class="btn btn-primary" style="width: 60%;">Iniciar sesion</button>
-        <p style="margin-top:12px;color:#777;font-size:0.9rem;">Si no tienes una cuenta, registrate y podras acceder a los eventos.</p>
-      </div>
-      {% endif %}
-      
+        {% else %}
+        <div
+          style="
+            max-width: 720px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+          "
+        >
+          <div style="font-size: 3rem; margin-bottom: 12px">🔐</div>
+          <h3 style="color: #333; margin-bottom: 8px">Acceso restringido</h3>
+          <p style="color: #666; margin-bottom: 20px">
+            Debes iniciar sesion para ver las capacitaciones y eventos en vivo.
+          </p>
+          <button
+            id="loginRequiredBtn"
+            class="btn btn-primary"
+            style="width: 60%"
+          >
+            Iniciar sesion
+          </button>
+          <p style="margin-top: 12px; color: #777; font-size: 0.9rem">
+            Si no tienes una cuenta, registrate y podras acceder a los eventos.
+          </p>
+        </div>
+        {% endif %}
+
         <script>
           // Abrir modal de login desde secciones que requieren autenticaci贸n
-          document.addEventListener('DOMContentLoaded', function() {
-            const loginRequiredBtn = document.getElementById('loginRequiredBtn');
-            const loginModal = document.getElementById('loginModal');
-            const loginOverlay = document.getElementById('loginOverlay');
+          document.addEventListener("DOMContentLoaded", function () {
+            const loginRequiredBtn =
+              document.getElementById("loginRequiredBtn");
+            const loginModal = document.getElementById("loginModal");
+            const loginOverlay = document.getElementById("loginOverlay");
             if (loginRequiredBtn) {
-              loginRequiredBtn.addEventListener('click', function() {
-                if (loginModal) loginModal.style.display = 'block';
-                if (loginOverlay) loginOverlay.style.display = 'block';
+              loginRequiredBtn.addEventListener("click", function () {
+                if (loginModal) loginModal.style.display = "block";
+                if (loginOverlay) loginOverlay.style.display = "block";
                 // scroll to modal (for small screens)
-                setTimeout(() => { if (loginModal) loginModal.scrollIntoView({behavior: 'smooth'}); }, 50);
+                setTimeout(() => {
+                  if (loginModal)
+                    loginModal.scrollIntoView({ behavior: "smooth" });
+                }, 50);
               });
             }
           });
         </script>
-
-    </div>
-  </section>
+      </div>
+    </section>
 
     <!-- Enlaces Útiles -->
     <section id="enlaces" class="elal-green">
@@ -651,6 +702,5 @@
     <script src="{% static 'js/chat.js' %}"></script>
     <script src="{% static 'js/elalmacen.js' %}"></script>
     <script src="{% static 'js/kits-carousel.js' %}"></script>
-    
   </body>
 </html>
