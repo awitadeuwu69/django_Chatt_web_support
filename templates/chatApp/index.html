@@ -33,7 +33,7 @@
           </div>
           <div class="top-actions">
             <a class="btn-cta btn-demo" href="{% url 'chatApp:download' %}" target="_blank">Descargar Demo Gratis</a>
-            <a class="btn-cta btn-quote" href="#beneficios">Cotizar</a>
+            <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}">Cotizar</a>
             <a class="btn-cta btn-contact" href="#contacto">Contáctenos</a>
           </div>
         </div>
@@ -297,7 +297,7 @@
                     <li style="padding: 8px 0">✓ Capacitación inicial</li>
                     <li style="padding: 8px 0">✓ Soporte técnico</li>
                   </ul>
-                  <a href="#contacto" class="boleta-btn"
+                  <a href="{% url 'chatApp:catalog' %}" class="btn btn-primary" style="background-color:blue; color:white;"
                     >Solicitar Cotización</a
                   >
                 </div>
