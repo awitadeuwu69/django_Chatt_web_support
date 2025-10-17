@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
-    <link rel="stylesheet" href="{% static 'css/modals-chat.css' %}">
 </head>
 <body>
-    {% csrf_token %}
     <!-- ==================== TOPBAR UNIFICADO ==================== -->
     <div class="pages-topbar">
         <!-- Sección superior con horario y acciones -->
@@ -161,50 +159,6 @@
     <form id="csrf-form" style="display: none">{% csrf_token %}</form>
 
     <!-- Scripts -->
-    <!-- Carrito popup -->
-    <div class="cart-popup" id="cartPopup">
-        <button id="cartCloseBtn" class="close-btn" aria-label="Cerrar carrito">✕</button>
-        <h4>Carrito</h4>
-        <ul id="cartItems"></ul>
-        <div id="cartTotal" class="cart-total"></div>
-    </div>
-
-    <!-- Modal Login -->
-    <div class="modal-overlay" id="loginOverlay"></div>
-    <div class="modal" id="loginModal">
-        <form id="loginForm">
-            {% csrf_token %}
-            <h3>Iniciar sesión</h3>
-            <input type="email" id="loginEmail" placeholder="Correo electrónico" required />
-            <div style="display: flex; gap: 8px;">
-                <input type="password" id="loginPassword" placeholder="Contraseña" required style="flex: 1;" />
-                <button type="button" class="password-toggle" id="showLoginPassword" onclick="togglePasswordVisibility('loginPassword')">👁️</button>
-            </div>
-            <button type="submit">Entrar</button>
-            <button type="button" id="closeLogin">Cerrar</button>
-        </form>
-    </div>
-
-    <!-- Modal Registro -->
-    <div class="modal-overlay" id="registerOverlay"></div>
-    <div class="modal" id="registerModal">
-        <form id="registerForm">
-            <h3>Registrarse</h3>
-            <input type="text" id="registerUsername" placeholder="Usuario" required />
-            <input type="email" id="registerEmail" placeholder="Correo electrónico" required />
-            <div style="display: flex; gap: 8px;">
-                <input type="password" id="registerPassword" placeholder="Contraseña" required style="flex: 1;" />
-                <button type="button" class="password-toggle" id="showRegisterPassword" onclick="togglePasswordVisibility('registerPassword', 'registerPasswordConfirm')">👁️</button>
-            </div>
-            <input type="password" id="registerPasswordConfirm" placeholder="Confirmar contraseña" required />
-            <button type="submit">Registrar</button>
-            <button type="button" id="closeRegister">Cerrar</button>
-        </form>
-    </div>
-
-    <!-- CSRF Token -->
-    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
-
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/catalog.js' %}"></script>
 </body>
