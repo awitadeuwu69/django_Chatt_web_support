@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const username = document.getElementById("loginUsername")?.value || email.split('@')[0];
 
       try {
-        const response = await fetch("/login/", {
+  const response = await fetch("/auth/login/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       try {
-        const response = await fetch("/register/", {
+  const response = await fetch("/auth/register/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.success) {
           // Intentar login automático
           try {
-            const loginRes = await fetch("/login/", {
+              const loginRes = await fetch("/auth/login/", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
