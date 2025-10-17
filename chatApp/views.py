@@ -32,14 +32,20 @@ def chat_view(request):
     return render(request, 'chatApp/index.html', {'avatars': avatars, 'products': products})
 
 # --- Vista del catálogo ---
+
+
 def catalog_view(request):
     return render(request, 'chatApp/catalog.html')
 
 # --- Vista de descarga ---
+
+
 def download_view(request):
     return render(request, 'chatApp/download.html')
 
 # --- API de mensajes ---
+
+
 @require_http_methods(["GET", "POST"])
 def messages_api(request):
     if request.method == 'GET':
@@ -63,7 +69,8 @@ def messages_api(request):
         sender = payload.get('sender', '')
         if not text:
             return HttpResponseBadRequest('Mensaje vacío')
-        m = Message.objects.create(text=text, tab=tab, avatar=avatar, sender=sender)
+        m = Message.objects.create(
+            text=text, tab=tab, avatar=avatar, sender=sender)
         return JsonResponse({'message': {
             'id': m.id,
             'text': m.text,
@@ -83,14 +90,41 @@ def register_api(request):
         username = data.get("username")
         email = data.get("email")
         password = data.get("password")
+        # Validar email primero
+        if not email:
+            return JsonResponse({"success": False, "error": "Email es requerido"}, status=400)
 
-        if User.objects.filter(username=username).exists():
-            return JsonResponse({"error": "El usuario ya existe"}, status=400)
         if User.objects.filter(email=email).exists():
-            return JsonResponse({"error": "El correo electrónico ya está registrado"}, status=400)
+            return JsonResponse({"success": False, "error": "El correo electrónico ya está registrado"}, status=400)
 
-        User.objects.create_user(username=username, email=email, password=password)
-        return JsonResponse({"success": True, "message": "Usuario registrado correctamente"})
+        # Si no se proporcionó username, derivarlo del email
+        if not username:
+            username = email.split("@")[0]
+
+        # Normalizar username básico
+        username = username.strip()
+        if username == "":
+            username = email.split("@")[0]
+
+        # Si el username ya existe, intentar con sufijo numérico hasta un límite
+        if User.objects.filter(username=username).exists():
+            base = username
+            suffix = 1
+            found = False
+            while suffix <= 1000:
+                candidate = f"{base}{suffix}"
+                if not User.objects.filter(username=candidate).exists():
+                    username = candidate
+                    found = True
+                    break
+                suffix += 1
+            if not found:
+                return JsonResponse({"success": False, "error": "No se pudo asignar un nombre de usuario único, prueba otro email o username"}, status=400)
+
+        # Crear usuario
+        User.objects.create_user(
+            username=username, email=email, password=password)
+        return JsonResponse({"success": True, "message": "Usuario registrado correctamente", "username": username})
     return JsonResponse({"error": "Método no permitido"}, status=405)
 
 
@@ -102,7 +136,8 @@ def login_api(request):
         email = data.get("email")
         password = data.get("password")
 
-        user = authenticate(request, username=username, email=email, password=password)
+        user = authenticate(request, username=username,
+                            email=email, password=password)
         if user is not None:
             login(request, user)
             return JsonResponse({"success": True})
@@ -144,7 +179,8 @@ def add_to_cart(request):
         cantidad = int(data.get("cantidad", 1))
 
         prod = Product.objects.get(id=pid)
-        item, created = CartItem.objects.get_or_create(user=request.user, product=prod)
+        item, created = CartItem.objects.get_or_create(
+            user=request.user, product=prod)
 
         if not created:
             item.cantidad += cantidad
