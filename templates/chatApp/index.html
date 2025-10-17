@@ -42,13 +42,17 @@
       <!-- Sección principal con navegación -->
       <div class="topbar-main">
         <div class="container">
-          <a href="#" class="topbar-brand"> 🏪 Club Almacén </a>
+          <a href="#" class="topbar-brand">
+  <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+  Club Almacén
+</a>
+          
+
 
           <nav class="topbar-nav">
             <a href="#" class="active">INICIO</a>
             <a href="#beneficios">BENEFICIOS</a>
             <a href="#noticias">NOTICIAS</a>
-            <a href="#directorio">DIRECTORIO</a>
             <a href="#capacitaciones">CAPACITACIONES</a>
             <a href="#nuevos">NUEVOS COMERCIOS</a>
             <a href="#kits">KITS POS</a>
@@ -80,23 +84,42 @@
     <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
 
     <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <h1>Bienvenido a Club Almacén</h1>
-        <p class="lead">
-          La comunidad digital que fortalece a los comerciantes de barrio en
-          <img
-            src="{% static 'images/landing/' %}"
-            alt="Chile"
-            style="width: 24px; height: auto; vertical-align: middle; margin-left: 6px"
-          Chile
-        </p>
-        <div class="hero-buttons">
-          <a href="#beneficios" class="btn btn-primary">Ver Beneficios</a>
+    <section
+  class="hero"
+  style="
+    position: relative;
+    background-image: url('{% static 'images/landing/almacen.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-align: center;
+    color: white;
+    padding: 120px 20px;
+    overflow: hidden;
+  "
+>
+  <!-- Capa oscura para mejorar contraste -->
+  <div
+    style="
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(75,45,180,0.55), rgba(60,40,120,0.55));
+      z-index: 1;
+    "
+  ></div>
+  
+  <!-- Contenido -->
+  <div style="position: relative; z-index: 2;">
+    <h1>Bienvenido a Club Almacén</h1>
+    <p>La comunidad digital que fortalece a los comerciantes de barrio en Chile</p>
+      <div class="hero-buttons">
+          <a href="#beneficios" class="btn btn-secondary">Ver Beneficios</a>
           <a href="{% url 'chatApp:catalog' %}" target="_blank" class="btn btn-secondary">Unirme Ahora</a>
         </div>
       </div>
     </section>
+  </div>
+</section>
 
     <!-- Sección Beneficios -->
     <section id="beneficios" class="features">
