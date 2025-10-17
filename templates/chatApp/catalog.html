@@ -6,27 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Software El Almacén - Versiones y Licencias</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
 </head>
 <body>
-    <!-- Topbar from index -->
-    <div class="elal-topbar">
-        <div class="container">
-            <div>Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.</div>
-            <div class="top-actions">
-                <a class="btn-cta btn-quote" href="#">Cotizar</a>
-                <a class="btn-cta btn-contact" href="#">Contáctenos</a>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+        <!-- Sección superior con horario y acciones -->
+        <div class="pages-topbar-top">
+            <div class="container">
+                <div class="topbar-schedule">
+                    📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+                </div>
+                <div class="top-actions">
+                    <a class="btn-cta btn-quote" href="{% url 'chatApp:chat' %}#beneficios">Cotizar</a>
+                    <a class="btn-cta btn-contact" href="{% url 'chatApp:chat' %}#contacto">Contáctenos</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal con logo y navegación -->
+        <div class="pages-topbar-main">
+            <div class="container">
+                <!-- Logo -->
+                <div class="topbar-logo">
+                    
+                    
+                    <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén" class="topbar-logo-image">
+                    
+                    
+                    <!-- Opción 2: Placeholder (eliminar cuando tengas el logo) -->
+                    <div class="topbar-logo-placeholder">
+                        Logo<br>Club Almacén
+                    </div>
+                </div>
+
+                <!-- Navegación -->
+                <nav class="pages-topbar-nav">
+                    <a href="{% url 'chatApp:chat' %}">INICIO</a>
+                    <a href="{% url 'chatApp:download' %}">DESCARGAR</a>
+                    <a href="{% url 'chatApp:catalog' %}" class="active">CATÁLOGO</a>
+                </nav>
+
+                <!-- Botón volver -->
+                <a href="{% url 'chatApp:chat' %}" class="btn-back">
+                    ← Volver al Inicio
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Blue navigation -->
-    <nav class="elal-nav">
-        <div class="nav-inner">
-            <a href="/">INICIO</a>
-            <a href="#" class="active">CATÁLOGO</a>
-        </div>
-    </nav>
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
 
     <!-- Catalog Header -->
     <section class="catalog-header">
@@ -43,7 +73,7 @@
             <div class="product-card">
                 <div class="product-header">
                     <h2>Software El Almacén</h2>
-                    <div class="version">Punto de Venta 1</div>
+                    <div class="version">Punto de Venta 1 PC</div>
                     <img src="{% static 'images/landing/box-pos.png' %}" alt="Software POS" class="product-image">
                 </div>
                 <div class="product-features">
@@ -58,12 +88,15 @@
                     </ul>
                 </div>
                 <div class="product-actions">
-                    <button class="btn-add-quote">Añadir al Presupuesto</button>
+                    <button class="btn-add-quote" data-product="pos-1pc">Añadir al Presupuesto</button>
                 </div>
             </div>
 
             <!-- Software en Red -->
             <div class="product-card featured">
+                <div class="ribbon">
+                    <span>Más Popular</span>
+                </div>
                 <div class="product-header">
                     <h2>Software El Almacén</h2>
                     <div class="version">en Red para 2 o 3 PC</div>
@@ -83,7 +116,7 @@
                     </ul>
                 </div>
                 <div class="product-actions">
-                    <button class="btn-add-quote">Añadir al Presupuesto</button>
+                    <button class="btn-add-quote" data-product="pos-red">Añadir al Presupuesto</button>
                 </div>
             </div>
 
@@ -91,7 +124,8 @@
             <div class="product-card premium">
                 <div class="product-header">
                     <h2>Software El Almacén</h2>
-                    <div class="version">Empresarial PC</div>
+                    <div class="version">Empresarial Multi PC</div>
+                    <div class="badge premium-badge">PREMIUM</div>
                     <img src="{% static 'images/landing/box-pos.png' %}" alt="Software POS Empresarial" class="product-image">
                 </div>
                 <div class="product-features">
@@ -107,7 +141,7 @@
                     </ul>
                 </div>
                 <div class="product-actions">
-                    <button class="btn-add-quote">Añadir al Presupuesto</button>
+                    <button class="btn-add-quote" data-product="pos-empresarial">Añadir al Presupuesto</button>
                 </div>
             </div>
         </div>
@@ -119,12 +153,16 @@
             <h2>¿Necesitas ayuda para elegir?</h2>
             <p>Nuestro equipo está disponible para asesorarte en la mejor opción para tu negocio</p>
             <div class="contact-actions">
-                <a href="#" class="btn-contact">Contactar un Asesor</a>
-                <a href="#" class="btn-compare">Comparar Versiones</a>
+                <a href="{% url 'chatApp:chat' %}#contacto" class="btn-contact-advisor">📞 Contactar un Asesor</a>
+                <a href="#" class="btn-compare">📊 Comparar Versiones</a>
             </div>
         </div>
     </section>
 
+    <!-- CSRF Form -->
+    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+
+    <!-- Scripts -->
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/catalog.js' %}"></script>
 </body>
