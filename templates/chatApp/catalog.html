@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Software El Almacén - Versiones y Licencias</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+</head>
+<body>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+        <!-- Sección superior con horario y acciones -->
+        <div class="pages-topbar-top">
+            <div class="container">
+                <div class="topbar-schedule">
+                    📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+                </div>
+                <div class="top-actions">
+                    <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}">Cotizar</a>
+                    <a class="btn-cta btn-contact" href="{% url 'chatApp:index' %}#contacto">Contáctenos</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal con logo y navegación -->
+        <div class="pages-topbar-main">
+            <div class="container">
+                <!-- Logo -->
+                <div class="topbar-logo">
+                    <a href="{% url 'chatApp:index' %}" class="topbar-logo-link">
+                        <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén" class="topbar-logo-image">
+                    </a>
+                </div>
+                  
+                <!-- Navegación -->
+                <nav class="pages-topbar-nav">
+                    <a href="{% url 'chatApp:index' %}">INICIO</a>
+                    <a href="{% url 'chatApp:download' %}">DESCARGAR</a>
+                    <a href="{% url 'chatApp:catalog' %}" class="active">CATÁLOGO</a>
+                </nav>
+
+                <!-- Botón volver -->
+                <a href="{% url 'chatApp:index' %}" class="btn-back">
+                    ← Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+
+    <!-- Catalog Header -->
+    <section class="catalog-header">
+        <div class="container">
+            <h1>Software El Almacén</h1>
+            <p class="subtitle">Selecciona la versión que mejor se adapte a tu negocio</p>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="catalog-grid">
+        <div class="container">
+            <!-- Software Individual -->
+            <div class="product-card">
+                <div class="product-header">
+                    <h2>Software El Almacén</h2>
+                    <div class="version">Punto de Venta 1 PC</div>
+                    <img src="{% static 'images/landing/box-pos.png' %}" alt="Software POS" class="product-image">
+                </div>
+                <div class="product-features">
+                    <ul>
+                        <li>✓ 1 Licencia de Usuario / 1 PC</li>
+                        <li>✓ Manual en PDF</li>
+                        <li>✓ Servicio de Instalación Remota Opcional</li>
+                        <li>✓ Centro de Auto-soporte</li>
+                        <li>✓ Plataforma de Minivideos de Capacitación</li>
+                        <li>✓ 1 Año de Soporte Personalizado sin Costo</li>
+                        <li>✓ Whatsapp, WEB, E-mail, Soporte Remoto</li>
+                    </ul>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-add-quote" data-product="pos-1pc">Añadir al Presupuesto</button>
+                </div>
+            </div>
+
+            <!-- Software en Red -->
+            <div class="product-card featured">
+                <div class="ribbon">
+                    <span>Más Popular</span>
+                </div>
+                <div class="product-header">
+                    <h2>Software El Almacén</h2>
+                    <div class="version">en Red para 2 o 3 PC</div>
+                    <div class="badge">RED</div>
+                    <img src="{% static 'images/landing/box-pos.png' %}" alt="Software POS Red" class="product-image">
+                </div>
+                <div class="product-features">
+                    <ul>
+                        <li>✓ 02 Licencias de Usuario / 2 o 3 PC</li>
+                        <li>✓ Servicio de Configuración / RED</li>
+                        <li>✓ Manual en PDF</li>
+                        <li>✓ Servicio de Instalación Remota Opcional</li>
+                        <li>✓ Centro de Auto-soporte</li>
+                        <li>✓ Plataforma de Minivideos de Capacitación</li>
+                        <li>✓ 01 Año de Soporte Personalizado sin Costo</li>
+                        <li>✓ Whatsapp, WEB, E-mail, Soporte Remoto</li>
+                    </ul>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-add-quote" data-product="pos-red">Añadir al Presupuesto</button>
+                </div>
+            </div>
+
+            <!-- Software Empresarial -->
+            <div class="product-card premium">
+                <div class="product-header">
+                    <h2>Software El Almacén</h2>
+                    <div class="version">Empresarial Multi PC</div>
+                    <div class="badge premium-badge">PREMIUM</div>
+                    <img src="{% static 'images/landing/box-pos.png' %}" alt="Software POS Empresarial" class="product-image">
+                </div>
+                <div class="product-features">
+                    <ul>
+                        <li>✓ 3+ Licencias de Usuario / Multi PC</li>
+                        <li>✓ Configuración de Red Avanzada</li>
+                        <li>✓ Manual en PDF + Documentación Técnica</li>
+                        <li>✓ Servicio de Instalación Remota Premium</li>
+                        <li>✓ Centro de Auto-soporte Prioritario</li>
+                        <li>✓ Plataforma de Capacitación Empresarial</li>
+                        <li>✓ 1 Año de Soporte Premium sin Costo</li>
+                        <li>✓ Soporte 24/7 por Todos los Canales</li>
+                    </ul>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-add-quote" data-product="pos-empresarial">Añadir al Presupuesto</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="catalog-contact">
+        <div class="container">
+            <h2>¿Necesitas ayuda para elegir?</h2>
+            <p>Nuestro equipo está disponible para asesorarte en la mejor opción para tu negocio</p>
+            <div class="contact-actions">
+                <a href="{% url 'chatApp:index' %}#contacto" class="btn-contact-advisor">📞 Contactar un Asesor</a>
+                <a href="{% url 'chatApp:index' %}#" class="btn-compare">📊 Comparar Versiones</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CSRF Form -->
+    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/catalog.js' %}"></script>
+</body>
+</html>

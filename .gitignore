@@ -1,0 +1,27 @@
+# Archivos de compilación Python
+__pycache__/
+*.pyc
+
+# Base de datos local
+db.sqlite3
+
+# Entornos virtuales
+venv/
+env/
+
+# Archivos de configuración del entorno
+*.env
+
+# Configuración de VS Code (opcional)
+.vscode/
+.idea/
+
+# Archivos de sistema (Windows / Mac)
+.DS_Store
+Thumbs.db
+
+Chatglobal/token.json
+chatApp/oauth_client_secret.json
+
+token.json
+oauth_client_secret.json

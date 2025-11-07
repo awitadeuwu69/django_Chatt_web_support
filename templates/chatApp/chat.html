@@ -1,0 +1,53 @@
+{# Plantilla para mostrar videos de YouTube proporcionados por get_youtube_events() #}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Chat / Video</title>
+	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+	<main class="container">
+		<h1>Videos</h1>
+
+		{% if videos %}
+			<div class="video-list">
+				{% for v in videos %}
+					<article class="video-item">
+						<h3>{{ v.title }}</h3>
+						{% if v.thumbnail %}
+							<img src="{{ v.thumbnail }}" alt="{{ v.title }} thumbnail" style="max-width:320px;display:block;margin-bottom:8px;">
+						{% endif %}
+						<p>{{ v.description }}</p>
+
+						{# Iframe de embed: usa embed_url que devuelve la función python #}
+						{% if v.embed_url and v.embed_allowed %}
+							<div class="video-embed" style="max-width:100%;margin:12px 0;">
+								<iframe width="560" height="315"
+									src="{{ v.embed_url }}"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen>
+								</iframe>
+							</div>
+						{% elif not v.embed_allowed %}
+							<div style="padding:8px;border-radius:6px;background:#fff6f6;color:#6a1b1b;">
+								<strong>No se puede reproducir aquí:</strong>
+								<div style="font-size:0.95rem">{{ v.embed_error|default:'Este video no permite embeberse.' }}</div>
+								<div style="margin-top:8px"><a href="{{ v.url }}" target="_blank" rel="noopener">Ver en YouTube</a></div>
+							</div>
+						{% else %}
+							<p><a href="{{ v.url }}" target="_blank" rel="noopener">Ver en YouTube</a></p>
+						{% endif %}
+					</article>
+				{% endfor %}
+			</div>
+		{% else %}
+			<p>No hay videos disponibles en este momento.</p>
+		{% endif %}
+	</main>
+</body>
+</html>
+

@@ -1,0 +1,349 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Club Almacén</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+        <div class="pages-topbar-top">
+            <div class="container">
+                <div class="topbar-schedule">
+                    📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+                </div>
+                <div class="top-actions">
+                    <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}">Cotizar</a>
+                    <a class="btn-cta btn-contact" href="{% url 'chatApp:index' %}#contacto">Contáctenos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pages-topbar-main">
+            <div class="container">
+                                    <div class="topbar-logo">
+                                        <a href="{% url 'chatApp:index' %}" class="topbar-logo-link">
+                                            <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén" class="topbar-logo-image">
+                                        </a>
+                                    </div>
+                <nav class="pages-topbar-nav">
+                    <a href="{% url 'chatApp:index' %}">INICIO</a>
+                    <a href="{% url 'chatApp:profile' %}" class="active">MI PERFIL</a>
+                    <a href="{% url 'chatApp:catalog' %}">CATÁLOGO</a>
+                </nav>
+
+                <a href="{% url 'chatApp:index' %}" class="btn-back">
+                    ← Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="profile-container">
+        <div class="profile-header">
+            <h1>Mi Perfil</h1>
+            <p>Gestiona tu información personal y configuración de cuenta</p>
+        </div>
+
+        <div class="profile-grid">
+            <!-- Sidebar con foto de perfil -->
+            <aside class="profile-sidebar" data-upload-photo-url="{% url 'chatApp:upload_photo' %}" data-delete-photo-url="{% url 'chatApp:delete_photo' %}">
+                <div class="profile-photo-container">
+                    {% if profile.foto_perfil %}
+                    <img src="{{ profile.foto_perfil.url }}" alt="Foto de perfil" class="profile-photo" id="profilePhoto">
+                    {% else %}
+                    <div class="profile-photo-placeholder" id="profilePhotoPlaceholder">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                    
+                    <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                        📷
+                    </button>
+                    <input type="file" id="photoInput" accept="image/*" onchange="uploadPhoto(this)">
+                </div>
+
+                <div class="profile-username">{{ user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+
+                <div class="photo-actions">
+                    <button type="button" class="btn-change-photo" onclick="document.getElementById('photoInput').click()">
+                        Cambiar Foto
+                    </button>
+                    {% if profile.foto_perfil %}
+                    <button type="button" class="btn-delete-photo" onclick="deletePhoto()">
+                        Eliminar
+                    </button>
+                    {% endif %}
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">{{ profile.fecha_creacion|date:"Y" }}</span>
+                        <span class="stat-label">Miembro desde</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">✓</span>
+                        <span class="stat-label">Activo</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Contenido principal -->
+            <div class="profile-content">
+                <!-- Información Personal -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <span class="section-icon">👤</span>
+                        <h2 class="section-title">Información Personal</h2>
+                        <button type="button" class="btn-edit" id="editPersonalInfoBtn">Editar</button>
+                    </div>
+
+                    <form id="personalInfoForm" class="profile-form" data-update-url="{% url 'chatApp:update_profile' %}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="username">Usuario *</label>
+                                <input type="text" id="username" value="{{ user.username }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico *</label>
+                                <input type="email" id="email" value="{{ user.email }}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombreCompleto">Nombre Completo</label>
+                                <input type="text" id="nombreCompleto" value="{{ profile.nombre_completo }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" value="{{ profile.telefono }}" placeholder="+56912345678" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="whatsapp">WhatsApp</label>
+                                <input type="tel" id="whatsapp" value="{{ profile.whatsapp }}" placeholder="+56912345678" disabled>
+                            </div>
+                        </div>
+                        <div class="form-actions" id="personalInfoActions" style="display: none;">
+                            <button type="button" class="btn-cancel" id="cancelPersonalInfoBtn">Cancelar</button>
+                            <button type="submit" class="btn-save">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Información del Negocio -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <span class="section-icon">🏪</span>
+                        <h2 class="section-title">Información del Negocio</h2>
+                        <button type="button" class="btn-edit" id="editBusinessInfoBtn">Editar</button>
+                    </div>
+
+                    <form id="businessInfoForm" class="profile-form" data-update-url="{% url 'chatApp:update_profile' %}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombreNegocio">Nombre del Negocio</label>
+                                <input type="text" id="nombreNegocio" value="{{ profile.nombre_negocio }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipoNegocio">Tipo de Negocio</label>
+                                <select id="tipoNegocio" disabled>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="almacen" {% if profile.tipo_negocio == 'almacen' %}selected{% endif %}>Almacén</option>
+                                    <option value="minimarket" {% if profile.tipo_negocio == 'minimarket' %}selected{% endif %}>Minimarket</option>
+                                    <option value="botilleria" {% if profile.tipo_negocio == 'botilleria' %}selected{% endif %}>Botillería</option>
+                                    <option value="panaderia" {% if profile.tipo_negocio == 'panaderia' %}selected{% endif %}>Panadería</option>
+                                    <option value="ferreteria" {% if profile.tipo_negocio == 'ferreteria' %}selected{% endif %}>Ferretería</option>
+                                    <option value="farmacia" {% if profile.tipo_negocio == 'farmacia' %}selected{% endif %}>Farmacia</option>
+                                    <option value="bazar" {% if profile.tipo_negocio == 'bazar' %}selected{% endif %}>Bazar</option>
+                                    <option value="otro" {% if profile.tipo_negocio == 'otro' %}selected{% endif %}>Otro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="relacionNegocio">Relación con el Negocio</label>
+                                <select id="relacionNegocio" disabled>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="dueno" {% if profile.relacion_negocio == 'dueno' %}selected{% endif %}>Dueño</option>
+                                    <option value="conyuge" {% if profile.relacion_negocio == 'conyuge' %}selected{% endif %}>Cónyuge</option>
+                                    <option value="hijo" {% if profile.relacion_negocio == 'hijo' %}selected{% endif %}>Hijo/a</option>
+                                    <option value="trabajador" {% if profile.relacion_negocio == 'trabajador' %}selected{% endif %}>Trabajador</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="comuna">Comuna</label>
+                                <input type="text" id="comuna" value="{{ profile.comuna }}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Región</label>
+                                <input type="text" id="region" value="{{ profile.region }}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" id="direccion" value="{{ profile.direccion }}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" id="businessInfoActions" style="display: none;">
+                            <button type="button" class="btn-cancel" id="cancelBusinessInfoBtn">Cancelar</button>
+                            <button type="submit" class="btn-save">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Preferencias -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <span class="section-icon">⚙️</span>
+                        <h2 class="section-title">Preferencias</h2>
+                    </div>
+
+                    <form id="preferencesForm" class="profile-form" data-update-url="{% url 'chatApp:update_profile' %}">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="notificaciones" {% if profile.recibir_notificaciones %}checked{% endif %}>
+                            <label for="notificaciones">Recibir notificaciones por email</label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="newsletter" {% if profile.recibir_newsletter %}checked{% endif %}>
+                            <label for="newsletter">Suscribirse al boletín informativo</label>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-save">Guardar Preferencias</button>
+                        </div>
+                    </form>
+                </section>
+
+
+
+                <!-- Cambiar Contraseña -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <span class="section-icon">🔒</span>
+                        <h2 class="section-title">Cambiar Contraseña</h2>
+                        <button type="button" class="btn-edit" id="editPasswordBtn">Editar</button>
+                    </div>
+
+                    <form id="passwordForm" class="profile-form" data-change-password-url="{% url 'chatApp:change_password' %}">
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="currentPassword">Contraseña Actual</label>
+                                <input type="password" id="currentPassword" required disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="newPassword">Nueva Contraseña</label>
+                                <input type="password" id="newPassword" required disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                                <input type="password" id="confirmPassword" required disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" id="passwordActions" style="display: none;">
+                            <button type="button" class="btn-cancel" id="cancelPasswordBtn">Cancelar</button>
+                            <button type="submit" class="btn-save">Cambiar Contraseña</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Zona de Peligro -->
+                <section class="profile-section danger-zone">
+                    <div class="section-header">
+                        <span class="section-icon">⚠️</span>
+                        <h2 class="section-title">Zona de Peligro</h2>
+                    </div>
+
+                    <div class="danger-actions">
+                        <div class="danger-item">
+                            <div class="danger-info">
+                                <h4>Eliminar Cuenta</h4>
+                                <p>Una vez eliminada tu cuenta, no hay vuelta atrás. Por favor, estate seguro.</p>
+                            </div>
+                            <button type="button" class="btn-danger" onclick="confirmDeleteAccount()" data-delete-account-url="{% url 'chatApp:delete_account' %}">
+                                Eliminar Cuenta
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para confirmar eliminación de cuenta -->
+    <div id="deleteAccountModal" class="custom-modal-overlay" style="display: none;">
+        <div class="custom-modal">
+            <div class="modal-header">
+                <h3>⚠️ ¿Eliminar tu cuenta?</h3>
+                <button type="button" class="modal-close-btn" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Esta acción <strong>no se puede deshacer</strong>. Se eliminarán permanentemente todos tus datos, incluyendo:</p>
+                <ul>
+                    <li>Tu perfil y foto</li>
+                    <li>Tu historial de mensajes</li>
+                    <li>Tus datos del carrito</li>
+                </ul>
+                <p>¿Estás seguro de que quieres continuar?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="cancelDeleteBtn">Cancelar</button>
+                <button type="button" class="btn-danger" id="confirmDeleteBtn">Sí, eliminar mi cuenta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para pedir contraseña -->
+    <div id="passwordModal" class="custom-modal-overlay" style="display: none;">
+        <div class="custom-modal">
+            <div class="modal-header">
+                <h3>Confirma tu identidad</h3>
+                <button type="button" class="modal-close-btn" id="closePasswordModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Para continuar con la eliminación de tu cuenta, por favor ingresa tu contraseña.</p>
+                <div class="form-group">
+                    <label for="deletePassword">Contraseña</label>
+                    <input type="password" id="deletePassword" placeholder="Ingresa tu contraseña aquí">
+                    <p id="passwordError" class="error-message" style="display: none;"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="cancelPasswordBtnModal">Cancelar</button>
+                <button type="button" class="btn-danger" id="confirmPasswordDeletionBtn">Confirmar y Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSRF Form -->
+    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+
+
+</body>
+</html>

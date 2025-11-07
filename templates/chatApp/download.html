@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Software Punto de Venta El Almacén</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/download.css' %}">
+</head>
+<body>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+        <!-- Sección superior con horario y acciones -->
+        <div class="pages-topbar-top">
+            <div class="container">
+                <div class="topbar-schedule">
+                    📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+                </div>
+                <div class="top-actions">
+                    <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}">Cotizar</a>
+                    <a class="btn-cta btn-contact" href="{% url 'chatApp:index' %}#contacto">Contáctenos</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección principal con logo y navegación -->
+        <div class="pages-topbar-main">
+            <div class="container">
+                <!-- Logo -->
+                <div class="topbar-logo">
+                    <a href="{% url 'chatApp:index' %}" class="topbar-logo-link">
+                        <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén" class="topbar-logo-image">
+                    </a>
+                </div>
+
+                <!-- Navegación -->
+                <nav class="pages-topbar-nav">
+                    <a href="{% url 'chatApp:index' %}">INICIO</a>
+                    <a href="{% url 'chatApp:download' %}" class="active">DESCARGAR</a>
+                    <a href="{% url 'chatApp:catalog' %}">CATÁLOGO</a>
+                </nav>
+
+                <!-- Botón volver -->
+                <a href="{% url 'chatApp:index' %}" class="btn-back">
+                    ← Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="download-container">
+        <div class="download-content">
+            <h1>Descargar Software Punto de Venta El Almacén</h1>
+            
+            <div class="download-steps">
+                <section class="step">
+                    <h2>1. DESCARGAR</h2>
+                    <p>Descargue e instale gratis la versión DEMO haciendo clic en el siguiente botón:</p>
+                    <a href="https://elalmacen.cl/descargas/demo.exe" class="btn-download" download>
+                        📥 DESCARGAR DEMO
+                    </a>
+                </section>
+
+                <section class="step">
+                    <h2>2. REGISTRE SU LICENCIA TEMPORAL</h2>
+                    <p>Por favor registre sus datos de contacto llenando el siguiente formulario y le enviaremos una Licencia Temporal a su E-mail:</p>
+                    
+                    <form id="licenseForm" class="license-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombre">Nombre *</label>
+                                <input type="text" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidos">Apellidos *</label>
+                                <input type="text" id="apellidos" name="apellidos" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="comuna">Comuna *</label>
+                                <input type="text" id="comuna" name="comuna" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Región *</label>
+                                <select id="region" name="region" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="arica">Arica y Parinacota</option>
+                                    <option value="tarapaca">Tarapacá</option>
+                                    <option value="antofagasta">Antofagasta</option>
+                                    <option value="atacama">Atacama</option>
+                                    <option value="coquimbo">Coquimbo</option>
+                                    <option value="valparaiso">Valparaíso</option>
+                                    <option value="metropolitana">Metropolitana</option>
+                                    <option value="ohiggins">O'Higgins</option>
+                                    <option value="maule">Maule</option>
+                                    <option value="nuble">Ñuble</option>
+                                    <option value="biobio">Bío Bío</option>
+                                    <option value="araucania">Araucanía</option>
+                                    <option value="rios">Los Ríos</option>
+                                    <option value="lagos">Los Lagos</option>
+                                    <option value="aysen">Aysén</option>
+                                    <option value="magallanes">Magallanes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">E-Mail *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="celular">Celular *</label>
+                                <input type="tel" id="celular" name="celular" placeholder="+569XXXXXXXX" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipoNegocio">¿Qué tipo de negocio tiene? *</label>
+                                <select id="tipoNegocio" name="tipoNegocio" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="almacen">Almacén</option>
+                                    <option value="minimarket">Minimarket</option>
+                                    <option value="botilleria">Botillería</option>
+                                    <option value="panaderia">Panadería</option>
+                                    <option value="ferreteria">Ferretería</option>
+                                    <option value="farmacia">Farmacia</option>
+                                    <option value="bazar">Bazar</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="comoSupo">¿Cómo supo de nosotros?</label>
+                                <select id="comoSupo" name="comoSupo">
+                                    <option value="">Seleccione una opción</option>
+                                    <option value="google">Google</option>
+                                    <option value="facebook">Facebook</option>
+                                    <option value="instagram">Instagram</option>
+                                    <option value="recomendacion">Recomendación</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="comentarios">Coméntenos su necesidad</label>
+                                <textarea id="comentarios" name="comentarios" rows="4" placeholder="Cuéntenos sobre su negocio y qué espera del software..."></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit">✉️ Enviar Solicitud</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- CSRF Form -->
+    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/download.js' %}"></script>
+</body>
+</html>

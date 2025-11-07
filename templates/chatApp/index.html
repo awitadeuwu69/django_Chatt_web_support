@@ -1,0 +1,793 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Club Almacén - Plataforma de Comerciantes</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Plataforma para crear comunidad de comerciantes de barrio. Beneficios, capacitaciones, directorios y más."
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'images/icon/favicon.png' %}"
+    />
+
+    <!-- css link -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/elalmacen.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modals-chat.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/kits-boleta.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/eventos.css' %}" />
+  </head>
+  <body>
+    <!-- ==================== TOPBAR  ==================== -->
+    <div class="topbar">
+      <!-- Sección superior con horario y acciones rápidas -->
+      <div class="topbar-top">
+        <div class="container">
+          <div class="topbar-schedule">
+            📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+          </div>
+          <div class="top-actions">
+            <a class="btn-cta btn-demo" href="{% url 'chatApp:download' %}" target="_blank">Descargar Demo Gratis</a>
+            <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}">Cotizar</a>
+            <a class="btn-cta btn-contact" href="{% url 'chatApp:index' %}#contacto">Contáctenos</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección principal con navegación -->
+      <div class="topbar-main">
+        <div class="container">
+          <a href="{% url 'chatApp:index' %}" class="topbar-brand">
+  <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén Logo" style="height: 40px; width: auto; margin-right: 10px; border-radius: 4px;">
+  Club Almacén
+</a>
+          
+
+
+          <nav class="topbar-nav">
+            <a href="{% url 'chatApp:index' %}" class="active">INICIO</a>
+            <a href="{% url 'chatApp:index' %}#beneficios">BENEFICIOS</a>
+            <a href="{% url 'chatApp:index' %}#noticias">NOTICIAS</a>
+            <a href="{% url 'chatApp:index' %}#capacitaciones">CAPACITACIONES</a>
+            <a href="{% url 'chatApp:index' %}#nuevos">NUEVOS COMERCIOS</a>
+            <a href="{% url 'chatApp:index' %}#kits">KITS POS</a>
+            <a href="{% url 'chatApp:index' %}#enlaces">ENLACES ÚTILES</a>
+          </nav>
+
+          <div class="topbar-actions">
+            {% if user.is_authenticated %}
+            <div class="user-info">👤 <strong>{{ user.username }}</strong></div>
+            {% endif %}
+
+            <button class="menu-btn" id="menuBtn" title="Menú">☰</button>
+
+            <div class="menu-dropdown" id="menuDropdown">
+              {% if user.is_authenticated %}
+              <button id="profileBtn" onclick="window.location.href='{% url 'chatApp:profile' %}'">👤 Mi Perfil</button> 
+              <button id="logoutBtn">🚪 Cerrar sesión</button>
+              {% else %}
+              <button id="loginBtn">🔑 Iniciar sesión</button>
+              <button id="registerBtn">✍️ Registrarse</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+
+    <!-- Hero Section -->
+    <section
+  class="hero"
+  style="
+    position: relative;
+    background-image: url('{% static 'images/landing/almacen.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-align: center;
+    color: white;
+    padding: 120px 20px;
+    overflow: hidden;
+  "
+>
+  <!-- Capa oscura para mejorar contraste -->
+  <div
+    style="
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(75,45,180,0.55), rgba(60,40,120,0.55));
+      z-index: 1;
+    "
+  ></div>
+  
+  <!-- Contenido -->
+  <div style="position: relative; z-index: 2;">
+    <h1>Bienvenido a Club Almacén</h1>
+    <p>La comunidad digital que fortalece a los comerciantes de barrio en Chile</p>
+      <div class="hero-buttons">
+          <a href="{% url 'chatApp:index' %}#beneficios" class="btn btn-secondary">Ver Beneficios</a>
+          <a href="{% url 'chatApp:catalog' %}" target="_blank" class="btn btn-secondary">Unirme Ahora</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+    <!-- Sección Beneficios -->
+    <section id="beneficios" class="features">
+      <div class="container">
+        <h2>Beneficios para Comerciantes</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="icon">🎁</div>
+            <h3>Concursos y Sorteos</h3>
+            <p>
+              Participa en concursos exclusivos y gana premios para tu negocio.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">📚</div>
+            <h3>Capacitaciones</h3>
+            <p>
+              Accede a charlas, webinars y capacitaciones gratuitas para mejorar
+              tu negocio.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">💰</div>
+            <h3>Descuentos Especiales</h3>
+            <p>
+              Obtén descuentos exclusivos con proveedores y en productos para tu
+              almacén.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🤝</div>
+            <h3>Red de Contactos</h3>
+            <p>Conéctate con otros comerciantes y proveedores de confianza.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">📱</div>
+            <h3>Software POS</h3>
+            <p>
+              Accede a tecnología de punto de venta diseñada para tu negocio.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🤖</div>
+            <h3>Asistente IA</h3>
+            <p>
+              Consulta con nuestro asistente virtual especializado en comercio.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Noticias -->
+    <section id="noticias" class="uses">
+      <div class="container">
+        <h2>Noticias y Actualidad</h2>
+        <p style="text-align: center; margin-bottom: 40px">
+          Mantente informado con las últimas noticias del sector
+        </p>
+        <div class="uses-grid">
+          <div class="use-case">
+            <h3>📰 Noticias Nacionales</h3>
+            <ul>
+              <li>Actualidad económica</li>
+              <li>Cambios en legislación</li>
+              <li>Tendencias de consumo</li>
+            </ul>
+          </div>
+          <div class="use-case">
+            <h3>📱 Redes Sociales</h3>
+            <ul>
+              <li>Facebook e Instagram</li>
+              <li>YouTube y TikTok</li>
+              <li>Contenido especializado</li>
+            </ul>
+          </div>
+          <div class="use-case">
+            <h3>🏛️ Servicios Públicos</h3>
+            <ul>
+              <li>SII y trámites fiscales</li>
+              <li>Fonasa y Previred</li>
+              <li>Municipalidades</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Nuevos Comercios -->
+    <section id="nuevos" class="requirements">
+      <div class="container">
+        <h2>¿Estás empezando tu negocio?</h2>
+        <div class="requirements-content">
+          <div class="requirements-text">
+            <p>Te ayudamos en cada paso:</p>
+            <ul>
+              <li>Guía de trámites legales</li>
+              <li>Ideas de negocio</li>
+              <li>Contacto con proveedores</li>
+              <li>Tecnología y software</li>
+              <li>Asesoría inicial gratuita</li>
+            </ul>
+            <a href="{% url 'chatApp:index' %}#register" class="btn btn-primary" style="margin-top: 20px"
+              >Comenzar Ahora</a
+            >
+          </div>
+          <div class="requirements-image">
+            <img
+              src="{% static 'images/landing/comercio.jpg' %}"
+              alt="Nuevos comercios"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN KITS  Y BOLETA  ==================== -->
+    <section id="kits" class="kits-boleta-section">
+      <div class="kits-boleta-container">
+        <!-- Header de la Sección -->
+        <div class="section-header">
+          <h2>Soluciones Tecnológicas para tu Negocio</h2>
+          <p>
+            Digitaliza tu almacén con nuestros kits completos y sistema de
+            boleta electrónica
+          </p>
+        </div>
+
+        <!-- Categorías Horizontales -->
+        <div class="categories-horizontal">
+          <div class="category-item">
+            <span class="icon">💻</span>
+            <h4>Kits POS</h4>
+          </div>
+          <div class="category-item">
+            <span class="icon">🧾</span>
+            <h4>Boleta Electrónica</h4>
+          </div>
+          <div class="category-item">
+            <span class="icon">🖥️</span>
+            <h4>Hardware</h4>
+          </div>
+          <div class="category-item">
+            <span class="icon">⚙️</span>
+            <h4>Software</h4>
+          </div>
+          <div class="category-item">
+            <span class="icon">🎓</span>
+            <h4>Capacitación</h4>
+          </div>
+        </div>
+
+        <!-- Galería de Kits - Carrusel -->
+        <div class="kits-gallery-wrapper">
+          <h3 class="kits-gallery-title">Kits de Punto de Venta 2025</h3>
+
+          <div class="kits-carousel">
+            <div class="kits-carousel-track">
+              <!-- Slide 1: Kit POS Sercotec -->
+              <div class="kit-slide">
+                <div class="kit-slide-content">
+                  <h3>Kit POS Completo</h3>
+                  <p>
+                    Kit completo certificado, ideal para comerciantes que buscan
+                    modernizar su negocio. Incluye terminal punto de venta,
+                    impresora de boletas y software El Almacén con licencia de
+                    por vida.
+                  </p>
+                  <ul style="list-style: none; padding: 0; margin: 16px 0">
+                    <li style="padding: 8px 0">
+                      ✓ Terminal táctil profesional
+                    </li>
+                    <li style="padding: 8px 0">✓ Impresora térmica incluida</li>
+                    <li style="padding: 8px 0">✓ Software El Almacén</li>
+                    <li style="padding: 8px 0">✓ Capacitación inicial</li>
+                    <li style="padding: 8px 0">✓ Soporte técnico</li>
+                  </ul>
+                  <a href="{% url 'chatApp:catalog' %}" class="btn btn-primary" style="background-color:blue; color:white;"
+                    >Solicitar Cotización</a
+                  >
+                </div>
+                <div class="kit-slide-image">
+                  <img
+                    src="{% static 'images/landing/kit-pos.jpg' %}"
+                    alt="Kit POS"
+                  />
+                </div>
+              </div>
+
+              <!-- Slide 2: Computador AIO -->
+              <div class="kit-slide">
+                <div class="kit-slide-content">
+                  <h3>Computador All-in-One</h3>
+                  <p>
+                    Computador todo en uno diseñado especialmente para negocios
+                    de barrio. Incluye pantalla táctil, sistema operativo y todo
+                    lo necesario para gestionar tu almacén de manera eficiente.
+                  </p>
+                  <ul style="list-style: none; padding: 0; margin: 16px 0">
+                    <li style="padding: 8px 0">✓ Pantalla táctil 21.5"</li>
+                    <li style="padding: 8px 0">✓ Windows 11 Pro</li>
+                    <li style="padding: 8px 0">✓ Procesador Intel</li>
+                    <li style="padding: 8px 0">✓ 8GB RAM / 256GB SSD</li>
+                    <li style="padding: 8px 0">✓ Webcam integrada</li>
+                  </ul>
+                  <a href="{% url 'chatApp:index' %}#contacto" class="boleta-btn">Ver Detalles</a>
+                </div>
+                <div class="kit-slide-image">
+                  <img
+                    src="{% static 'images/landing/aio.jpg' %}"
+                    alt="Computador AIO"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Controles del Carrusel -->
+            <div class="carousel-controls">
+              <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+              <button class="carousel-btn next" aria-label="Siguiente">
+                ›
+              </button>
+            </div>
+          </div>
+
+          <!-- Indicadores -->
+          <div class="carousel-indicators">
+            <span class="indicator active"></span>
+            <span class="indicator"></span>
+          </div>
+        </div>
+
+        <!-- Sección Boleta Electrónica -->
+        <div class="boleta-section">
+          <div class="boleta-image">
+            <img
+              src="{% static 'images/landing/boleta.jpeg' %}"
+              alt="Boleta Electrónica"
+            />
+          </div>
+
+          <div class="boleta-content">
+            <h3>
+              <span class="icon">🧾</span>
+              Boleta Electrónica de Club Almacén
+            </h3>
+            <p>
+              Servicio de pago anual conveniente que te permite emitir boletas
+              electrónicas ilimitadas. Funciona incluso sin Internet y
+              sincroniza automáticamente con el SII cuando recuperas la
+              conexión.
+            </p>
+
+            <ul class="boleta-features">
+              <li>Boletas ilimitadas todo el año</li>
+              <li>Funciona sin Internet</li>
+              <li>Sincronización automática con SII</li>
+              <li>Sin costos de intermediarios</li>
+              <li>Soporte técnico incluido</li>
+              <li>Actualizaciones gratuitas</li>
+            </ul>
+
+            <a href="{% url 'chatApp:index' %}#contacto" class="boleta-btn">MÁS INFORMACIÓN</a>
+          </div>
+        </div>
+
+        <!-- Features Row -->
+        <div class="elal-feat-grid" style="margin-top: 60px">
+          <div class="elal-feat">
+            <div class="icon">🧾</div>
+            <h4>Boletas Ilimitadas</h4>
+            <p>Sin límites, fáciles de emitir</p>
+          </div>
+          <div class="elal-feat">
+            <div class="icon">🔓</div>
+            <h4>Licencia de Por Vida</h4>
+            <p>Pago único con soporte incluido</p>
+          </div>
+          <div class="elal-feat">
+            <div class="icon">👍</div>
+            <h4>Fácil de Usar</h4>
+            <p>Interfaz simple y rápida</p>
+          </div>
+        </div>
+
+        <!-- Nota al pie -->
+        <div class="footer-note">
+          <p>
+            ¿Ganaste el concurso <strong>ALMACENES DE CHILE</strong>? Solicita
+            tu cotización especial aquí.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seccion Streaming y Capacitaciones (requiere inicio de sesi贸n) -->
+    <section id="capacitaciones" class="demo">
+      <div class="container">
+        <h2>Capacitaciones y Eventos en Vivo</h2>
+
+        {% if user.is_authenticated %}
+        <div
+          style="
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+          "
+        >
+          <div class="eventos-container">
+            <div class="eventos-tabs">
+              <button id="capacitaciones-tab" class="tab-button active" data-tab="capacitaciones-content">Capacitaciones</button>
+              <button id="eventos-live-tab" class="tab-button" data-tab="eventos-live-content">Eventos Live</button>
+            </div>
+            <div class="eventos-content">
+              <div id="capacitaciones-content" class="event-content active">
+                <ul style="list-style: none; padding: 20px 0; color: #333;">
+                  <li style="padding: 12px 0;">No hay capacitaciones próximas.</li>
+                </ul>
+              </div>
+              <div id="eventos-live-content" class="event-content">
+                <ul id="event-list" style="list-style: none; padding: 20px 0; color: #333;">
+                  {% for event in youtube_events %}
+                    <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+                      <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div style="display:flex; align-items:center;">
+                          <img src="{{ event.thumbnail }}" alt="{{ event.title }}" style="width: 120px; height: 90px; margin-right: 16px; border-radius: 8px;">
+                          <div>
+                            <h4 style="margin: 0 0 8px 0;">{{ event.title }}</h4>
+                            <p style="margin: 0; font-size: 0.9rem; color: #666;">{{ event.description|truncatewords:20 }}</p>
+                          </div>
+                        </div>
+
+                        {# Si la API devolvió embed_url, mostramos el iframe directamente en la página #}
+                        {% if event.embed_url and event.embed_allowed %}
+                          <div style="max-width:100%;">
+                            <iframe width="560" height="315"
+                              src="{{ event.embed_url }}"
+                              frameborder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowfullscreen>
+                            </iframe>
+                          </div>
+                        {% elif not event.embed_allowed %}
+                          <div style="padding:8px;border-radius:6px;background:#fff6f6;color:#6a1b1b;">
+                            <strong>No se puede reproducir aquí:</strong>
+                            <div style="font-size:0.95rem">{{ event.embed_error|default:'Este video no permite embeberse.' }}</div>
+                            <div style="margin-top:8px"><a href="{{ event.url }}" target="_blank" rel="noopener">Ver en YouTube</a></div>
+                          </div>
+                        {% else %}
+                          <a href="{{ event.url }}" target="_blank" rel="noopener" style="color:inherit">Ver en YouTube</a>
+                        {% endif %}
+                      </div>
+                    </li>
+                  {% empty %}
+                    <li style="padding: 12px 0;">No hay eventos próximos.</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const eventosTabsContainer = document.querySelector('.eventos-tabs');
+              if (eventosTabsContainer) {
+                const tabButtons = eventosTabsContainer.querySelectorAll('.tab-button');
+                const eventContents = document.querySelectorAll('.event-content');
+
+                eventosTabsContainer.addEventListener('click', (e) => {
+                  const clickedButton = e.target.closest('.tab-button');
+                  if (!clickedButton) return;
+
+                  tabButtons.forEach(button => button.classList.remove('active'));
+                  eventContents.forEach(content => content.classList.remove('active'));
+
+                  clickedButton.classList.add('active');
+
+                  const tabId = clickedButton.dataset.tab;
+                  const contentToShow = document.getElementById(tabId);
+
+                  if (contentToShow) {
+                    contentToShow.classList.add('active');
+                  }
+                });
+              }
+            });
+          </script>
+          <button id="update-events-btn" class="btn btn-secondary" style="width: 100%; margin-top: 20px; background-color: #6c757d; border-color: #6c757d;">Actualizar Eventos</button>
+          <a
+            href="{% url 'chatApp:index' %}#capacitaciones"
+            class="btn btn-primary"
+            style="
+              width: 100%;
+              margin-top: 30px;
+              display: block;
+              text-align: center;
+            "
+            >Ver Calendario Completo</a
+          >
+        </div>
+
+
+        {% else %}
+        <div
+          style="
+            max-width: 720px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+          "
+        >
+          <div style="font-size: 3rem; margin-bottom: 12px">🔐</div>
+          <h3 style="color: #333; margin-bottom: 8px">Acceso restringido</h3>
+          <p style="color: #666; margin-bottom: 20px">
+            Debes iniciar sesion para ver las capacitaciones y eventos en vivo.
+          </p>
+          <button
+            id="loginRequiredBtn"
+            class="btn btn-primary"
+            style="width: 60%"
+          >
+            Iniciar sesion
+          </button>
+          <p style="margin-top: 12px; color: #777; font-size: 0.9rem">
+            Si no tienes una cuenta, registrate y podras acceder a los eventos.
+          </p>
+        </div>
+        {% endif %}
+
+        <script>
+          // Abrir modal de login desde secciones que requieren autenticaci贸n
+          document.addEventListener("DOMContentLoaded", function () {
+            const loginRequiredBtn =
+              document.getElementById("loginRequiredBtn");
+            const loginModal = document.getElementById("loginModal");
+            const loginOverlay = document.getElementById("loginOverlay");
+            if (loginRequiredBtn) {
+              loginRequiredBtn.addEventListener("click", function () {
+                if (loginModal) loginModal.style.display = "block";
+                if (loginOverlay) loginOverlay.style.display = "block";
+                // scroll to modal (for small screens)
+                setTimeout(() => {
+                  if (loginModal)
+                    loginModal.scrollIntoView({ behavior: "smooth" });
+                }, 50);
+              });
+            }
+          });
+        </script>
+      </div>
+    </section>
+
+    <!-- Enlaces Útiles -->
+    <section id="enlaces" class="elal-green">
+      <div class="green-inner">
+        <div class="green-copy">
+          <h2>Enlaces Útiles</h2>
+          <p>
+            Accede rápidamente a los servicios más utilizados por comerciantes:
+          </p>
+          <ul style="list-style: none; padding: 0; margin: 20px 0">
+            <li style="padding: 8px 0">🏦 Bancos y pago de cuentas</li>
+            <li style="padding: 8px 0">📋 SII y trámites fiscales</li>
+            <li style="padding: 8px 0">🏛️ Servicios municipales</li>
+            <li style="padding: 8px 0">📱 Proveedores y servicios</li>
+          </ul>
+          <a class="elal-cta" href="{% url 'chatApp:index' %}#register">PERSONALIZAR MIS ENLACES</a>
+        </div>
+        <div class="green-image">
+          <img
+            src="{% static 'images/landing/redes4kavif.avif' %}"
+            alt="Enlaces útiles"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>Club Almacén</h4>
+            <p>Fortaleciendo a los comerciantes de barrio desde 1999</p>
+            <p>Email: contacto@clubalmacen.com</p>
+            <p>WhatsApp: +56 9 XXXX XXXX</p>
+          </div>
+          <div class="footer-section">
+            <h4>Enlaces Rápidos</h4>
+            <a href="{% url 'chatApp:index' %}#beneficios">Beneficios</a>
+            <a href="{% url 'chatApp:index' %}#noticias">Noticias</a>
+            <a href="{% url 'chatApp:index' %}#kits">Kits POS</a>
+            <a href="{% url 'chatApp:index' %}#capacitaciones">Capacitaciones</a>
+          </div>
+          <div class="footer-section">
+            <h4>Síguenos</h4>
+            <div class="social-links">
+              <a href="https://www.facebook.com/elalmacen" target="_blank">Facebook</a>
+              <a href="https://www.instagram.com/elalmacen" target="_blank">Instagram</a>
+              <a href="https://www.youtube.com/elalmacen" target="_blank">YouTube</a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h4>Legal</h4>
+            <a href="{% url 'chatApp:index' %}#">Términos y condiciones</a>
+            <a href="{% url 'chatApp:index' %}#">Política de privacidad</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Club Almacén. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ==================== MODALES ====================  -->
+
+    <!-- Modal Login -->
+    <div class="modal-overlay" id="loginOverlay"></div>
+    <div class="modal" id="loginModal">
+      <form id="loginForm">
+        <h3>Iniciar sesión</h3>
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="Correo electrónico"
+          required
+        />
+        <div style="display: flex; gap: 8px">
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Contraseña"
+            required
+            style="flex: 1"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            id="showLoginPassword"
+            onclick="togglePasswordVisibility('loginPassword')"
+          >
+            👁️
+          </button>
+        </div>
+        <button type="submit">Entrar</button>
+        <button type="button" id="closeLogin">Cerrar</button>
+      </form>
+    </div>
+
+    <!-- Modal Registro -->
+    <div class="modal-overlay" id="registerOverlay"></div>
+    <div class="modal" id="registerModal">
+      <form id="registerForm">
+        <h3>Registrarse en Club Almacén</h3>
+        <input
+          type="text"
+          id="registerName"
+          placeholder="Nombre y Apellido"
+          required
+        />
+        <input
+          type="email"
+          id="registerEmail"
+          placeholder="Correo electrónico"
+          required
+        />
+        <input
+          type="tel"
+          id="registerWhatsapp"
+          placeholder="WhatsApp (ej: +56912345678)"
+          required
+        />
+        <select id="registerRole" required>
+          <option value="">Relación con el negocio</option>
+          <option value="dueno">Dueño</option>
+          <option value="conyuge">Cónyuge</option>
+          <option value="hijo">Hijo/a</option>
+          <option value="trabajador">Trabajador</option>
+        </select>
+        <select id="registerType" required>
+          <option value="">Tipo de negocio</option>
+          <option value="almacen">Almacén</option>
+          <option value="minimarket">Minimarket</option>
+          <option value="botilleria">Botillería</option>
+          <option value="panaderia">Panadería</option>
+          <option value="otro">Otro</option>
+        </select>
+        <div style="display: flex; gap: 8px">
+          <input
+            type="password"
+            id="registerPassword"
+            placeholder="Contraseña"
+            required
+            style="flex: 1"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            id="showRegisterPassword"
+            onclick="togglePasswordVisibility('registerPassword', 'registerPasswordConfirm')"
+          >
+            👁️
+          </button>
+        </div>
+        <input
+          type="password"
+          id="registerPasswordConfirm"
+          placeholder="Confirmar contraseña"
+          required
+        />
+        <button type="submit">Registrar</button>
+        <button type="button" id="closeRegister">Cerrar</button>
+      </form>
+    </div>
+
+    <!-- Chat Popup -->
+    <div id="chatOverlay">
+      <div
+        class="chat-container"
+        id="chatContainer"
+        role="dialog"
+        aria-label="Chat"
+      >
+        <button id="close-chat">✖</button>
+
+        <div class="chat-header">
+          Chat Comunidad
+          <div id="datetime"></div>
+        </div>
+
+        <div class="tabs" id="tabs">
+          <div class="tab active" data-tab="nacional">Nacional</div>
+          <div class="tab" data-tab="regional">Regional</div>
+          <div class="tab" data-tab="soporte">Soporte</div>
+        </div>
+
+        <div class="messages" id="messages"></div>
+
+        <div class="input-row">
+          <input
+            type="text"
+            id="msgInput"
+            placeholder="Escribe un mensaje..."
+          />
+          <button id="sendBtn">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boton de chat -->
+    <button id="toggle-chat" class="chat-toggle">Chat</button>
+
+    <!-- CSRF Form -->
+    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+
+    <!-- Variable global -->
+    <script>
+      window.currentUsername =
+        "{% if user.is_authenticated %}{{ user.username }}{% endif %}";
+    </script>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/chat.js' %}"></script>
+    <script src="{% static 'js/elalmacen.js' %}"></script>
+    <script src="{% static 'js/kits-carousel.js' %}"></script>
+  </body>
+</html>

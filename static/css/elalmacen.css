@@ -1,0 +1,248 @@
+/* Minimal styles extracted/created to render El Almacén page sections inside the index template
+   Focused on galleries, kit cards, headings and layout; keep small and non-intrusive. */
+
+.elal-section {
+  padding: 40px 0;
+  background: #fff;
+}
+
+.elal-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.elal-hero {
+  background: linear-gradient(135deg, #0a74d1, #0a4da1);
+  color: #fff;
+  padding: 60px 0;
+  text-align: center;
+}
+
+.elal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.elal-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  padding: 16px;
+}
+
+.elal-card img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.elal-cta {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #0078ff;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.elal-gallery {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.elal-footer-small {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin-top: 24px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .elal-hero {
+    padding: 36px 0;
+  }
+}
+
+/* Top utility bar */
+.elal-topbar {
+  background: #f6e7b8; 
+  padding: 6px 0;
+  font-size: 13px;
+  color: #333;
+}
+.elal-topbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.elal-topbar .top-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.elal-topbar .btn-cta {
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.btn-demo {
+  background: #e91e63;
+}
+.btn-quote {
+  background: #28a745;
+}
+.btn-contact {
+  background: #ff8c00;
+}
+
+/* Blue navigation */
+.elal-nav {
+  background: #0a98d6;
+  color: #fff;
+}
+.elal-nav .nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.elal-nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 4px;
+}
+.elal-nav a.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Hero large purple area with boxed product */
+.elal-hero-large {
+  background: linear-gradient(90deg, #3a0f7a, #2a1b6f);
+  color: #fff;
+  padding: 60px 0;
+}
+.elal-hero-large .hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.elal-hero-large .hero-copy {
+  flex: 1;
+}
+.elal-hero-large .hero-box {
+  width: 260px;
+  background: #fff;
+  padding: 14px;
+  border-radius: 6px;
+  text-align: center;
+}
+.elal-hero-large .hero-box img {
+  max-width: 100%;
+}
+
+/* Boleta Electrónica section */
+.elal-boleta {
+  background: #fff;
+  padding: 40px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+.elal-boleta .boleta-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.elal-boleta .boleta-img {
+  width: 220px;
+}
+.elal-boleta .boleta-content {
+  flex: 1;
+}
+.elal-boleta .btn-more {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: #0b86d1;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* Features row */
+.elal-features {
+  padding: 36px 0;
+  background: #f7f9fb;
+}
+.elal-feat-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+.elal-feat {
+  text-align: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  flex: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.elal-feat .icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+/* Green commerce section */
+.elal-green {
+  background: #e9f9ea;
+  padding: 50px 0;
+}
+.elal-green .green-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.elal-green .green-copy {
+  flex: 1;
+}
+.elal-green .green-image {
+  width: 320px;
+}
+
+@media (max-width: 900px) {
+  .elal-hero-large .hero-inner,
+  .elal-boleta .boleta-inner,
+  .elal-green .green-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .elal-boleta .boleta-img,
+  .elal-green .green-image {
+    width: 100%;
+  }
+}
