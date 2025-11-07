@@ -20,8 +20,8 @@ env/
 .DS_Store
 Thumbs.db
 
-Chatglobal/token.json
-chatApp/oauth_client_secret.json
-
+# Archivos de credenciales sensibles
 token.json
 oauth_client_secret.json
+Chatglobal/token.json
+chatApp/oauth_client_secret.json
