@@ -25,3 +25,6 @@ token.json
 oauth_client_secret.json
 Chatglobal/token.json
 chatApp/oauth_client_secret.json
+
+# Archivos de medios subidos
+media/
