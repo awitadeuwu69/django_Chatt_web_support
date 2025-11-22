@@ -33,8 +33,6 @@
                 </div>
                 <nav class="pages-topbar-nav">
                     <a href="{% url 'chatApp:index' %}">INICIO</a>
-                    <a href="{% url 'chatApp:profile' %}">MI PERFIL</a>
-                    <a href="{% url 'chatApp:catalog' %}">CATÁLOGO</a>
                     {% if user.is_authenticated and user.profile.role == 'admin' %}
                         <a href="{% url 'chatApp:admin_dashboard' %}" class="active">ADMIN</a>
                     {% endif %}
@@ -52,6 +50,33 @@
         <div class="admin-header">
             <h1>Admin Dashboard</h1>
             <p>Gestión de usuarios registrados en el sistema.</p>
+        </div>
+
+        <!-- Panel Maestro -->
+        <div class="master-panel">
+            <h2>Panel Maestro</h2>
+            <div class="panel-cards">
+                <!-- Card: Tiempo de Actividad -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">Tiempo de Actividad</div>
+                        <div class="card-value">{{ master_panel.uptime }}</div>
+                    </div>
+                </div>
+                <!-- Card: Usuarios Conectados -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">Usuarios Conectados</div>
+                        <div class="card-value">{{ master_panel.active_sessions }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Formulario de Búsqueda y Ordenamiento -->

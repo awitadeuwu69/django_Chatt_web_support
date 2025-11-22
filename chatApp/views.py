@@ -36,12 +36,47 @@ def admin_required(function):
     wrap.__name__ = function.__name__
     return wrap
 
+import datetime
+import requests
+from django.conf import settings
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+
+# Cache para la IP pública
+public_ip_cache = None
+
 @login_required
 @admin_required
 def admin_dashboard(request):
     """
-    Displays a panel with all user profiles, with search and sorting.
+    Muestra el panel de administración con perfiles de usuario, búsqueda,
+    ordenamiento y un panel maestro con estadísticas del sistema.
     """
+    global public_ip_cache
+    # --- Lógica del Panel Maestro ---
+
+    # 1. Tiempo de actividad del servidor
+    uptime_delta = datetime.datetime.now() - settings.SERVER_START_TIME
+    days = uptime_delta.days
+    hours, remainder = divmod(uptime_delta.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    uptime_str = f"{days}d {hours}h {minutes}m {seconds}s"
+
+    # 2. Usuarios conectados (sesiones activas)
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now()).count()
+
+    # 3. IP pública (con caché simple)
+    if public_ip_cache is None:
+        try:
+            response = requests.get('https://api.ipify.org?format=json', timeout=5)
+            response.raise_for_status()
+            public_ip_cache = response.json().get('ip', 'No disponible')
+        except requests.RequestException:
+            public_ip_cache = 'No se pudo obtener'
+    
+    public_ip = public_ip_cache
+
+    # --- Lógica de la tabla de usuarios ---
     user_profiles = UserProfile.objects.select_related('user')
 
     # Parámetros de búsqueda y ordenamiento
@@ -53,22 +88,27 @@ def admin_dashboard(request):
         user_profiles = user_profiles.filter(user__username__icontains=search_query)
 
     # Lógica de ordenamiento
+    order_field = '-user__date_joined' # Default
     if sort_by == 'date_asc':
-        user_profiles = user_profiles.order_by('user__date_joined')
+        order_field = 'user__date_joined'
     elif sort_by == 'date_desc':
-        user_profiles = user_profiles.order_by('-user__date_joined')
+        order_field = '-user__date_joined'
     elif sort_by == 'role_asc':
-        user_profiles = user_profiles.order_by('role')
+        order_field = 'role'
     elif sort_by == 'role_desc':
-        user_profiles = user_profiles.order_by('-role')
-    else:
-        # Ordenamiento por defecto si el parámetro no es válido
-        user_profiles = user_profiles.order_by('-user__date_joined')
+        order_field = '-role'
+    
+    user_profiles = user_profiles.order_by(order_field)
 
     context = {
         'user_profiles': user_profiles,
         'search_query': search_query,
-        'sort_by': sort_by
+        'sort_by': sort_by,
+        'master_panel': {
+            'uptime': uptime_str,
+            'active_sessions': active_sessions,
+            'public_ip': public_ip,
+        }
     }
 
     return render(request, 'chatApp/admin_dashboard.html', context)

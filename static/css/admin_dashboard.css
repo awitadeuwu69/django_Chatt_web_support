@@ -25,6 +25,80 @@
     color: #666;
 }
 
+/* Panel Maestro */
+.master-panel {
+    margin-bottom: 2rem;
+}
+
+.master-panel h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.panel-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: #fff;
+}
+
+.card-content .card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.card-content .card-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+/* Colores específicos para cada tarjeta */
+.card:nth-child(1) .card-icon { background-color: #007bff; }
+.card:nth-child(1) .card-value { color: #007bff; }
+
+.card:nth-child(2) .card-icon { background-color: #28a745; }
+.card:nth-child(2) .card-value { color: #28a745; }
+
+.card:nth-child(3) .card-icon { background-color: #6f42c1; }
+.card:nth-child(3) .card-value { color: #6f42c1; }
+
 /* Estilos para los filtros de usuario */
 .user-filters {
     margin-bottom: 2rem;
