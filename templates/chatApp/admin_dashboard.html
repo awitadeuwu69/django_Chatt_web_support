@@ -33,7 +33,8 @@
                 </div>
                 <nav class="pages-topbar-nav">
                     <a href="{% url 'chatApp:index' %}">INICIO</a>
-                    {% if user.is_authenticated and user.profile.role == 'admin' %}
+                    <a href="{% url 'chatApp:club_almacen_blog' %}">BLOG</a>
+                    {% if user.is_authenticated and user.is_superuser %}
                         <a href="{% url 'chatApp:admin_dashboard' %}" class="active">ADMIN</a>
                     {% endif %}
                 </nav>
@@ -72,8 +73,9 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     </div>
                     <div class="card-content">
-                        <div class="card-title">Usuarios Conectados</div>
-                        <div class="card-value">{{ master_panel.active_sessions }}</div>
+                        <div class="card-title">Sesiones / Usuarios Online</div>
+                        <div class="card-value">{{ master_panel.active_sessions }} sesiones</div>
+                        <div style="font-size:0.9rem;color:#666;margin-top:6px">{{ master_panel.online_users }} usuarios autenticados online</div>
                     </div>
                 </div>
             </div>
@@ -85,7 +87,6 @@
                 <div class="form-group">
                     <input type="text" name="search" class="form-control" placeholder="Buscar por nombre de usuario..." value="{{ search_query }}">
                 </div>
-                <div class="form-group">
                     <select name="sort" class="form-control">
                         <option value="date_desc" {% if sort_by == 'date_desc' %}selected{% endif %}>Más nuevos primero</option>
                         <option value="date_asc" {% if sort_by == 'date_asc' %}selected{% endif %}>Más antiguos primero</option>
@@ -102,9 +103,9 @@
             <div class="table-header">
                 <h2>
                     {% if search_query %}
-                        {{ user_profiles.count }} usuarios encontrados
+                        {{ user_profiles.paginator.count }} usuarios encontrados
                     {% else %}
-                        Todos los usuarios
+                        Todos los usuarios ({{ user_profiles.paginator.count }})
                     {% endif %}
                 </h2>
                 {% if search_query %}
@@ -161,7 +162,50 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <div class="pagination" style="margin-top:16px;">
+                {% if user_profiles.has_previous %}
+                    <a class="btn" href="?page={{ user_profiles.previous_page_number }}&search={{ search_query }}&sort={{ sort_by }}">« Anterior</a>
+                {% endif %}
+
+                <span style="margin:0 8px">Página {{ user_profiles.number }} de {{ user_profiles.paginator.num_pages }}</span>
+
+                {% if user_profiles.has_next %}
+                    <a class="btn" href="?page={{ user_profiles.next_page_number }}&search={{ search_query }}&sort={{ sort_by }}">Siguiente »</a>
+                {% endif %}
+            </div>
         </div>
+
+        <!-- Sección: Entradas del Blog -->
+        <section style="margin-top:40px;">
+            <h2>Entradas del Blog</h2>
+            <div class="blog-admin-list">
+                {% if posts %}
+                    <table class="user-table">
+                        <thead>
+                            <tr><th>Título</th><th>Autor</th><th>Publicado</th><th>Creado</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for p in posts %}
+                                <tr>
+                                    <td>{{ p.title }}</td>
+                                    <td>{{ p.author.username }}</td>
+                                    <td>{{ p.published }}</td>
+                                    <td>{{ p.created_at|date:"d M Y" }}</td>
+                                    <td>
+                                        <a class="btn" href="/admin/chatApp/blogpost/{{ p.id }}/change/">Editar en Admin</a>
+                                        <a class="btn" href="{% url 'chatApp:edit_post' p.id %}">Editar (UI)</a>
+                                        <a class="btn btn-danger" href="{% url 'chatApp:delete_post' p.id %}">Eliminar</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No hay entradas de blog.</p>
+                {% endif %}
+            </div>
+        </section>
     </main>
 
 </body>

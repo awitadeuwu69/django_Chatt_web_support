@@ -1,0 +1,144 @@
+/* CSS for the Club Almacen Blog */
+
+.blog-container {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+}
+
+.blog-content h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.blog-section {
+  margin-bottom: 40px;
+}
+
+.blog-section h2 {
+  color: #c54141;
+  border-bottom: 2px solid #c54141;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.blog-post {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.blog-post h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.blog-post p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Reactions and comments styling */
+.post-meta {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+.post-tags {
+  margin: 8px 0;
+}
+.post-tags .tag {
+  display: inline-block;
+  background: #f0f0f0;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-right: 6px;
+  font-size: 0.85rem;
+}
+.post-reactions {
+  margin-top: 12px;
+}
+.reaction-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.reaction-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.reaction-btn .count {
+  font-weight: 600;
+  margin-left: 4px;
+}
+.reaction-btn.active {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.post-comments {
+  margin-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+}
+.comments-list .comment-item {
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+.comments-list .comment-item:last-child {
+  border-bottom: none;
+}
+.comment-content {
+  margin-top: 6px;
+}
+.comment-actions {
+  margin-top: 6px;
+}
+.comment-edit-input {
+  width: 100%;
+  min-height: 80px;
+  margin-top: 6px;
+}
+.btn-link {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0 6px;
+}
+.comment-form textarea.comment-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.btn-danger {
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}

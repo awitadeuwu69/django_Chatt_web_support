@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Eliminar Entrada - Club Almacén</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+  </head>
+  <body>
+    <div class="container" style="padding: 40px">
+      <h1>Eliminar Entrada</h1>
+      <p>¿Confirmas eliminar la entrada "{{ post.title }}"?</p>
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Sí, eliminar</button>
+        <a class="btn" href="{% url 'chatApp:club_almacen_blog' %}">Cancelar</a>
+      </form>
+    </div>
+  </body>
+</html>

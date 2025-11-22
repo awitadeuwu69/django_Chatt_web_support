@@ -1,0 +1,262 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muro o Blog de Club Almacén</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/club_almacen_blog.css' %}" />
+  </head>
+  <body>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+      <!-- Sección superior con horario y acciones -->
+      <div class="pages-topbar-top">
+        <div class="container">
+          <div class="topbar-schedule">
+            📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+          </div>
+          <div class="top-actions">
+            <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}"
+              >Cotizar</a
+            >
+            <a
+              class="btn-cta btn-contact"
+              href="{% url 'chatApp:index' %}#contacto"
+              >Contáctenos</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección principal con logo y navegación -->
+      <div class="pages-topbar-main">
+        <div class="container">
+          <!-- Logo -->
+          <div class="topbar-logo">
+            <a href="{% url 'chatApp:index' %}" class="topbar-logo-link">
+              <img
+                src="{% static 'images/landing/clubalmacen.png' %}"
+                alt="Club Almacén"
+                class="topbar-logo-image"
+              />
+            </a>
+          </div>
+
+          <!-- Navegación -->
+          <nav class="pages-topbar-nav">
+            <a href="{% url 'chatApp:index' %}">INICIO</a>
+            <a href="{% url 'chatApp:download' %}">DESCARGAR</a>
+            <a href="{% url 'chatApp:catalog' %}">CATÁLOGO</a>
+            <a href="{% url 'chatApp:club_almacen_blog' %}" class="active"
+              >BLOG</a
+            >
+          </nav>
+
+          <!-- Botón volver -->
+          <a href="{% url 'chatApp:index' %}" class="btn-back">
+            ← Volver al Inicio
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="blog-container">
+      <div class="blog-content">
+        <h1>Muro o Blog de Club Almacén</h1>
+
+        <div style="margin: 16px 0">
+          {% if user.is_authenticated %} {% if user.is_superuser %}
+          <a href="{% url 'chatApp:create_post' %}" class="btn btn-primary"
+            >Crear nueva entrada</a
+          >
+          {% else %} {% if user.profile.role == 'proveedor' %}
+          <a href="{% url 'chatApp:create_post' %}" class="btn btn-primary"
+            >Crear nueva entrada</a
+          >
+          {% endif %} {% endif %} {% endif %}
+        </div>
+
+        <div class="blog-posts">
+          {% if posts %} {% for post in posts %}
+          <section class="blog-section" id="post-{{ post.id }}">
+            <article class="blog-post" data-post-id="{{ post.id }}">
+              <h3>{{ post.title }}</h3>
+              <div class="post-meta">
+                Por {{ post.author.username }} — {{ post.created_at|date:"d M Y
+                H:i" }}
+              </div>
+              {% if post.image %}
+              <div class="post-image">
+                <img
+                  src="{{ post.image.url }}"
+                  alt="{{ post.title }}"
+                  style="
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 6px;
+                    margin: 8px 0;
+                  "
+                />
+              </div>
+              {% endif %}
+              <p>{{ post.content|linebreaks }}</p>
+
+              {# Tags #} {% if post.tags.all %}
+              <div class="post-tags">
+                {% for tag in post.tags.all %}
+                <span class="tag">{{ tag.name }}</span>
+                {% endfor %}
+              </div>
+              {% endif %} {# Reactions: render raw reaction items for JS to
+              count and provide toggle #}
+              <div class="post-reactions" data-post-id="{{ post.id }}">
+                <div class="reaction-buttons">
+                  <button
+                    class="reaction-btn {% if post.user_like %}active{% endif %}"
+                    data-emoji="👍"
+                    title="Me gusta"
+                  >
+                    👍 <span class="count">{{ post.like_count }}</span>
+                  </button>
+                  <button
+                    class="reaction-btn {% if post.user_heart %}active{% endif %}"
+                    data-emoji="❤️"
+                    title="Me encanta"
+                  >
+                    ❤️ <span class="count">{{ post.heart_count }}</span>
+                  </button>
+                  <button
+                    class="reaction-btn {% if post.user_laugh %}active{% endif %}"
+                    data-emoji="😂"
+                    title="Me divierte"
+                  >
+                    😂 <span class="count">{{ post.laugh_count }}</span>
+                  </button>
+                  <button
+                    class="reaction-btn {% if post.user_party %}active{% endif %}"
+                    data-emoji="🎉"
+                    title="Celebrar"
+                  >
+                    🎉 <span class="count">{{ post.party_count }}</span>
+                  </button>
+                </div>
+              </div>
+
+              {# Admin / author actions #}
+              <div class="post-actions">
+                {% if user.is_authenticated %} {% if user.is_superuser or
+                post.author == user %}
+                <a class="btn" href="{% url 'chatApp:edit_post' post.id %}"
+                  >Editar</a
+                >
+                <a
+                  class="btn btn-danger"
+                  href="{% url 'chatApp:delete_post' post.id %}"
+                  >Eliminar</a
+                >
+                {% endif %} 
+              </div>
+
+              {# Comentarios #}
+              <div class="post-comments" data-post-id="{{ post.id }}">
+                <h4>Comentarios</h4>
+                <div class="comments-list">
+                  {% if post.comments.all %} {% for c in post.comments.all %}
+                  <div
+                    class="comment-item"
+                    id="comment-{{ c.id }}"
+                    data-comment-id="{{ c.id }}"
+                  >
+                    {% if c.author %}
+                    <strong>{{ c.author.username }}</strong>
+                    {% else %}
+                    <strong>Anon</strong>
+                    {% endif %}
+                    <small class="comment-time"
+                      >{{ c.created_at|date:"d M Y H:i" }}</small
+                    >
+                    <div class="comment-content">
+                      {{ c.content|linebreaks }}
+                    </div>
+                    {% if user.is_authenticated %} {% if user.is_superuser %}
+                    <div class="comment-actions">
+                      <button
+                        class="btn btn-link comment-edit-btn"
+                        data-comment-id="{{ c.id }}"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        class="btn btn-link comment-delete-btn"
+                        data-comment-id="{{ c.id }}"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    {% else %} {% if c.author and c.author == user %}
+                    <div class="comment-actions">
+                      <button
+                        class="btn btn-link comment-edit-btn"
+                        data-comment-id="{{ c.id }}"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        class="btn btn-link comment-delete-btn"
+                        data-comment-id="{{ c.id }}"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    {% endif %} {% endif %} {% endif %}
+                  </div>
+                  {% endfor %} {% else %}
+                  <p class="no-comments">Sé el primero en comentar.</p>
+                  {% endif %}
+                </div>
+
+                {% if user.is_authenticated %}
+                <form class="comment-form" data-post-id="{{ post.id }}">
+                  <textarea
+                    name="content"
+                    class="comment-input"
+                    placeholder="Escribe un comentario..."
+                    required
+                  ></textarea>
+                  <div style="margin-top: 8px">
+                    <button
+                      class="btn btn-primary comment-submit"
+                      type="submit"
+                    >
+                      Comentar
+                    </button>
+                  </div>
+                </form>
+                {% else %}
+                <p>
+                  <a href="{% url 'chatApp:login' %}">Inicia sesión</a> para
+                  comentar.
+                </p>
+                {% endif %}
+              </div>
+            </article>
+          </section>
+          {% endfor %} {% else %}
+          <p>No hay entradas publicadas aún.</p>
+          {% endif %}
+        </div>
+      </div>
+    </main>
+
+    <!-- CSRF Form -->
+    <form id="csrf-form" style="display: none">{% csrf_token %}</form>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/blog.js' %}"></script>
+  </body>
+</html>
