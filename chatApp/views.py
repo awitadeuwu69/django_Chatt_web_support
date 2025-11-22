@@ -16,6 +16,85 @@ from .models import Message, Product, CartItem, UserProfile
 
 from .youtube_service import get_youtube_events
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import user_passes_test
+
+
+def admin_required(function):
+    """
+    Decorator for views that require the user to be an administrator.
+    """
+    def wrap(request, *args, **kwargs):
+        if request.user.is_authenticated and hasattr(request.user, 'profile') and request.user.profile.role == 'admin':
+            return function(request, *args, **kwargs)
+        else:
+            # Redirect to the home page or show a 403 Forbidden error.
+            # messages.error(request, "You do not have permission to access this page.")
+            return redirect('chatApp:index') # Assuming 'index' is the name of your main view.
+    
+    wrap.__doc__ = function.__doc__
+    wrap.__name__ = function.__name__
+    return wrap
+
+@login_required
+@admin_required
+def admin_dashboard(request):
+    """
+    Displays a panel with all user profiles, with search and sorting.
+    """
+    user_profiles = UserProfile.objects.select_related('user')
+
+    # Parámetros de búsqueda y ordenamiento
+    search_query = request.GET.get('search', '')
+    sort_by = request.GET.get('sort', 'date_desc')
+
+    # Búsqueda por nombre de usuario
+    if search_query:
+        user_profiles = user_profiles.filter(user__username__icontains=search_query)
+
+    # Lógica de ordenamiento
+    if sort_by == 'date_asc':
+        user_profiles = user_profiles.order_by('user__date_joined')
+    elif sort_by == 'date_desc':
+        user_profiles = user_profiles.order_by('-user__date_joined')
+    elif sort_by == 'role_asc':
+        user_profiles = user_profiles.order_by('role')
+    elif sort_by == 'role_desc':
+        user_profiles = user_profiles.order_by('-role')
+    else:
+        # Ordenamiento por defecto si el parámetro no es válido
+        user_profiles = user_profiles.order_by('-user__date_joined')
+
+    context = {
+        'user_profiles': user_profiles,
+        'search_query': search_query,
+        'sort_by': sort_by
+    }
+
+    return render(request, 'chatApp/admin_dashboard.html', context)
+
+
+@login_required
+@admin_required
+def user_profile_detail_view(request, username):
+    """
+    Muestra los detalles del perfil de un usuario específico.
+    """
+    try:
+        user_obj = User.objects.get(username=username)
+        profile = UserProfile.objects.get(user=user_obj)
+        return render(request, 'chatApp/user_profile_detail.html', {
+            'profile': profile,
+            'user': user_obj
+        })
+    except User.DoesNotExist:
+        messages.error(request, f"El usuario '{username}' no existe.")
+        return redirect('chatApp:admin_dashboard')
+    except UserProfile.DoesNotExist:
+        messages.error(request, f"El perfil para el usuario '{username}' no fue encontrado.")
+        return redirect('chatApp:admin_dashboard')
+
+
 
 def update_events_api(request):
     youtube_events = get_youtube_events()

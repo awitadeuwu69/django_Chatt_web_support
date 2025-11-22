@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Perfil - {{ profile.user.username }}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+        <div class="pages-topbar-main">
+            <div class="container">
+                <div class="topbar-logo">
+                    <a href="{% url 'chatApp:index' %}" class="topbar-logo-link">
+                        <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén" class="topbar-logo-image">
+                    </a>
+                </div>
+                <nav class="pages-topbar-nav">
+                    <a href="{% url 'chatApp:index' %}">INICIO</a>
+                    {% if user.is_authenticated and user.profile.role == 'admin' %}
+                        <a href="{% url 'chatApp:admin_dashboard' %}" class="active">ADMIN</a>
+                    {% endif %}
+                </nav>
+                <a href="{% url 'chatApp:admin_dashboard' %}" class="btn-back">
+                    ← Volver al Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="profile-container">
+        <div class="profile-header">
+            <h1>Perfil de {{ profile.user.username }}</h1>
+            <p>Vista de solo lectura de la información del usuario.</p>
+        </div>
+
+        <div class="profile-grid">
+            <!-- Sidebar con foto de perfil -->
+            <aside class="profile-sidebar">
+                <div class="profile-photo-container">
+                    {% if profile.foto_perfil %}
+                    <img src="{{ profile.foto_perfil.url }}" alt="Foto de perfil" class="profile-photo">
+                    {% else %}
+                    <div class="profile-photo-placeholder">
+                        {{ profile.user.username|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="profile-username">{{ profile.user.username }}</div>
+                <div class="profile-email">{{ profile.user.email }}</div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">{{ profile.fecha_creacion|date:"Y" }}</span>
+                        <span class="stat-label">Miembro desde</span>
+                    </div>
+                     <div class="stat-item">
+                        <span class="stat-value">{{ profile.get_role_display }}</span>
+                        <span class="stat-label">Rol</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Contenido principal -->
+            <div class="profile-content">
+                <!-- Información Personal -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <span class="section-icon">👤</span>
+                        <h2 class="section-title">Información Personal</h2>
+                    </div>
+
+                    <div class="profile-form readonly">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nombre Completo</label>
+                                <p>{{ profile.nombre_completo|default:"No especificado" }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <p>{{ profile.telefono|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <p>{{ profile.whatsapp|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Información del Negocio -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <span class="section-icon">🏪</span>
+                        <h2 class="section-title">Información del Negocio</h2>
+                    </div>
+                    <div class="profile-form readonly">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nombre del Negocio</label>
+                                <p>{{ profile.nombre_negocio|default:"No especificado" }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Negocio</label>
+                                <p>{{ profile.get_tipo_negocio_display|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                             <div class="form-group">
+                                <label>Relación con el Negocio</label>
+                                <p>{{ profile.get_relacion_negocio_display|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Comuna</label>
+                                <p>{{ profile.comuna|default:"No especificado" }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Región</label>
+                                <p>{{ profile.region|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Dirección</label>
+                                <p>{{ profile.direccion|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

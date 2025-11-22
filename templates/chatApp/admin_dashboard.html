@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Club Almacén</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+</head>
+<body>
+    <!-- ==================== TOPBAR UNIFICADO ==================== -->
+    <div class="pages-topbar">
+        <div class="pages-topbar-top">
+            <div class="container">
+                <div class="topbar-schedule">
+                    📅 Horario: Lunes a Viernes de 09:30 a 14:00 y de 15:00 a 18:00hrs.
+                </div>
+                <div class="top-actions">
+                    <a class="btn-cta btn-quote" href="{% url 'chatApp:catalog' %}">Cotizar</a>
+                    <a class="btn-cta btn-contact" href="{% url 'chatApp:index' %}#contacto">Contáctenos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pages-topbar-main">
+            <div class="container">
+                <div class="topbar-logo">
+                    <a href="{% url 'chatApp:index' %}" class="topbar-logo-link">
+                        <img src="{% static 'images/landing/clubalmacen.png' %}" alt="Club Almacén" class="topbar-logo-image">
+                    </a>
+                </div>
+                <nav class="pages-topbar-nav">
+                    <a href="{% url 'chatApp:index' %}">INICIO</a>
+                    <a href="{% url 'chatApp:profile' %}">MI PERFIL</a>
+                    <a href="{% url 'chatApp:catalog' %}">CATÁLOGO</a>
+                    {% if user.is_authenticated and user.profile.role == 'admin' %}
+                        <a href="{% url 'chatApp:admin_dashboard' %}" class="active">ADMIN</a>
+                    {% endif %}
+                </nav>
+
+                <a href="{% url 'chatApp:index' %}" class="btn-back">
+                    ← Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <p>Gestión de usuarios registrados en el sistema.</p>
+        </div>
+
+        <!-- Formulario de Búsqueda y Ordenamiento -->
+        <div class="user-filters">
+            <form method="GET" action="{% url 'chatApp:admin_dashboard' %}" class="filter-form">
+                <div class="form-group">
+                    <input type="text" name="search" class="form-control" placeholder="Buscar por nombre de usuario..." value="{{ search_query }}">
+                </div>
+                <div class="form-group">
+                    <select name="sort" class="form-control">
+                        <option value="date_desc" {% if sort_by == 'date_desc' %}selected{% endif %}>Más nuevos primero</option>
+                        <option value="date_asc" {% if sort_by == 'date_asc' %}selected{% endif %}>Más antiguos primero</option>
+                        <option value="role_asc" {% if sort_by == 'role_asc' %}selected{% endif %}>Rol (A-Z)</option>
+                        <option value="role_desc" {% if sort_by == 'role_desc' %}selected{% endif %}>Rol (Z-A)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Buscar</button>
+                <a href="{% url 'chatApp:admin_dashboard' %}" class="btn-secondary">Limpiar</a>
+            </form>
+        </div>
+
+        <div class="user-table-container">
+            <div class="table-header">
+                <h2>
+                    {% if search_query %}
+                        {{ user_profiles.count }} usuarios encontrados
+                    {% else %}
+                        Todos los usuarios
+                    {% endif %}
+                </h2>
+                {% if search_query %}
+                    <a href="{% url 'chatApp:admin_dashboard' %}" class="clear-search">Limpiar búsqueda</a>
+                {% endif %}
+            </div>
+
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Nombre Completo</th>
+                        <th>Rol</th>
+                        <th>Negocio</th>
+                        <th>Ubicación</th>
+                        <th>Miembro Desde</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile in user_profiles %}
+                    <tr>
+                        <td>
+                            <div class="user-cell">
+                                {% if profile.foto_perfil %}
+                                    <img src="{{ profile.foto_perfil.url }}" alt="Foto de perfil" class="user-avatar">
+                                {% else %}
+                                    <div class="user-avatar-placeholder">{{ profile.user.username|slice:":1"|upper }}</div>
+                                {% endif %}
+                                <a href="{% url 'chatApp:user_profile_detail' username=profile.user.username %}">
+                                    <span>{{ profile.user.username }}</span>
+                                </a>
+                            </div>
+                        </td>
+                        <td>{{ profile.user.email }}</td>
+                        <td>{{ profile.nombre_completo|default:"N/A" }}</td>
+                        <td>
+                            <span class="role-badge role-{{ profile.role }}">{{ profile.get_role_display }}</span>
+                        </td>
+                        <td>{{ profile.nombre_negocio|default:"N/A" }}</td>
+                        <td>{{ profile.comuna|default:"N/A" }}, {{ profile.region|default:"N/A" }}</td>
+                        <td>{{ profile.user.date_joined|date:"d M, Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">
+                            {% if search_query %}
+                                No se encontraron usuarios que coincidan con "{{ search_query }}".
+                            {% else %}
+                                No hay usuarios registrados.
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>

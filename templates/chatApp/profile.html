@@ -35,6 +35,9 @@
                     <a href="{% url 'chatApp:index' %}">INICIO</a>
                     <a href="{% url 'chatApp:profile' %}" class="active">MI PERFIL</a>
                     <a href="{% url 'chatApp:catalog' %}">CATÁLOGO</a>
+                    {% if user.is_authenticated and user.profile.role == 'admin' %}
+                        <a href="{% url 'chatApp:admin_dashboard' %}">ADMIN</a>
+                    {% endif %}
                 </nav>
 
                 <a href="{% url 'chatApp:index' %}" class="btn-back">
@@ -187,11 +190,15 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="comuna">Comuna</label>
-                                <input type="text" id="comuna" value="{{ profile.comuna }}" disabled>
+                                <select id="comuna" disabled>
+                                    <option value="">Cargando comunas...</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="region">Región</label>
-                                <input type="text" id="region" value="{{ profile.region }}" disabled>
+                                <select id="region" disabled>
+                                    <option value="">Cargando regiones...</option>
+                                </select>
                             </div>
                         </div>
 
@@ -342,6 +349,12 @@
 
     <!-- Scripts -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        // Valores actuales (usados por static/js/regions.js)
+        window.currentRegion = "{{ profile.region|default_if_none:''|escapejs }}";
+        window.currentComuna = "{{ profile.comuna|default_if_none:''|escapejs }}";
+    </script>
+    <script src="{% static 'js/regions.js' %}"></script>
     <script src="{% static 'js/profile.js' %}"></script>
 
 

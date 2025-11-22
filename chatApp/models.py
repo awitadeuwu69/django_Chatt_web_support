@@ -43,6 +43,13 @@ class UserProfile(models.Model):
     """Perfil extendido del usuario"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     
+    # Roles
+    ROLE_CHOICES = (
+        ('user', 'Usuario'),
+        ('admin', 'Administrador'),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
+
     # Información personal
     nombre_completo = models.CharField(max_length=200, blank=True)
     telefono = models.CharField(max_length=20, blank=True)

@@ -40,6 +40,9 @@
                     <a href="{% url 'chatApp:index' %}">INICIO</a>
                     <a href="{% url 'chatApp:download' %}">DESCARGAR</a>
                     <a href="{% url 'chatApp:catalog' %}" class="active">CATÁLOGO</a>
+                    {% if user.is_authenticated and user.profile.role == 'admin' %}
+                        <a href="{% url 'chatApp:admin_dashboard' %}">ADMIN</a>
+                    {% endif %}
                 </nav>
 
                 <!-- Botón volver -->

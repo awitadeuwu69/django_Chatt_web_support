@@ -58,6 +58,9 @@
             <a href="{% url 'chatApp:index' %}#nuevos">NUEVOS COMERCIOS</a>
             <a href="{% url 'chatApp:index' %}#kits">KITS POS</a>
             <a href="{% url 'chatApp:index' %}#enlaces">ENLACES ÚTILES</a>
+            {% if user.is_authenticated and user.profile.role == 'admin' %}
+                <a href="{% url 'chatApp:admin_dashboard' %}">ADMIN</a>
+            {% endif %}
           </nav>
 
           <div class="topbar-actions">
@@ -689,19 +692,7 @@
           placeholder="Correo electrónico"
           required
         />
-        <input
-          type="tel"
-          id="registerWhatsapp"
-          placeholder="WhatsApp (ej: +56912345678)"
-          required
-        />
-        <select id="registerRole" required>
-          <option value="">Relación con el negocio</option>
-          <option value="dueno">Dueño</option>
-          <option value="conyuge">Cónyuge</option>
-          <option value="hijo">Hijo/a</option>
-          <option value="trabajador">Trabajador</option>
-        </select>
+        
         <select id="registerType" required>
           <option value="">Tipo de negocio</option>
           <option value="almacen">Almacén</option>

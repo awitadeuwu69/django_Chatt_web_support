@@ -10,6 +10,8 @@ urlpatterns = [
     path('catalog/', views.catalog_view, name='catalog'),
     path('download/', views.download_view, name='download'),
     path('profile/', views.profile_view, name='profile'),
+    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin/profile/<str:username>/', views.user_profile_detail_view, name='user_profile_detail'),
     
     # API de mensajes
     #path('messages/', views.messages_api, name='messages_api'),
