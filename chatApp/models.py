@@ -127,6 +127,7 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    video = models.FileField(upload_to='blog/videos/', blank=True, null=True)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='blog_posts')
     published = models.BooleanField(default=True)

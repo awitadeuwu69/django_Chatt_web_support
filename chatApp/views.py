@@ -767,3 +767,14 @@ def add_to_cart(request):
         return JsonResponse({"success": True})
     except Product.DoesNotExist:
         return JsonResponse({"success": False, "error": "Producto no encontrado"}, status=404)
+
+        product = Product.objects.get(id=product_id)
+
+        cart_item, created = CartItem.objects.get_or_create(
+            user=request.user, product=product)
+        cart_item.quantity += 1
+        cart_item.save()
+
+        return JsonResponse({"success": True})
+    except Product.DoesNotExist:
+        return JsonResponse({"success": False, "error": "Producto no encontrado"}, status=404)

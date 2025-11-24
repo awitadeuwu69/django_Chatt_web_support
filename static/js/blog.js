@@ -7,7 +7,12 @@ function getCookie(name) {
 }
 
 function getCSRF() {
-  return getCookie("csrftoken");
+  let token = getCookie("csrftoken");
+  if (!token) {
+    const input = document.querySelector('[name="csrfmiddlewaretoken"]');
+    if (input) token = input.value;
+  }
+  return token;
 }
 
 async function postComment(postId, content) {
@@ -49,7 +54,7 @@ function updateReactionCountsUI(postEl, counts) {
 function renderComment(postEl, comment) {
   const list = postEl.querySelector(".comments-list");
   if (!list) return;
-  // remove "no comments" placeholder
+  // remov "no comments" placeholder
   const placeholder = list.querySelector(".no-comments");
   if (placeholder) placeholder.remove();
 
@@ -69,8 +74,22 @@ function escapeHtml(unsafe) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/\"/g, "&quot;")
+    .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function countInitialReactions(postEl) {
+  const counts = {};
+  const buttons = postEl.querySelectorAll(".reaction-btn");
+  buttons.forEach(function (btn) {
+    const emoji = btn.dataset.emoji;
+    const countSpan = btn.querySelector(".count");
+    if (emoji && countSpan) {
+      const count = parseInt(countSpan.textContent) || 0;
+      counts[emoji] = count;
+    }
+  });
+  return counts;
 }
 
 function attachPostHandlers(postEl) {
@@ -115,8 +134,16 @@ function attachPostHandlers(postEl) {
       const commentId = btn.dataset.commentId;
       const commentEl = postEl.querySelector(`#comment-${commentId}`);
       if (!commentEl) return;
+
+      // Si ya está en modo edición, no hacer nada
+      if (commentEl.querySelector('.comment-edit-input')) return;
+
       const contentEl = commentEl.querySelector(".comment-content");
       const original = contentEl.innerText.trim();
+      const actionsEl = commentEl.querySelector(".comment-actions");
+
+      // Ocultar botones de editar/eliminar mientras editamos
+      actionsEl.style.display = 'none';
 
       // replace with textarea and save/cancel
       const textarea = document.createElement("textarea");
@@ -131,9 +158,13 @@ function attachPostHandlers(postEl) {
       const cancelBtn = document.createElement("button");
       cancelBtn.className = "btn comment-edit-cancel";
       cancelBtn.textContent = "Cancelar";
-      const actions = commentEl.querySelector(".comment-actions");
-      actions.appendChild(saveBtn);
-      actions.appendChild(cancelBtn);
+
+      const btnContainer = document.createElement("div");
+      btnContainer.className = "comment-edit-buttons";
+      btnContainer.style.marginTop = "8px";
+      btnContainer.appendChild(saveBtn);
+      btnContainer.appendChild(cancelBtn);
+      commentEl.appendChild(btnContainer);
 
       saveBtn.addEventListener("click", async function (ev) {
         ev.preventDefault();
@@ -153,8 +184,8 @@ function attachPostHandlers(postEl) {
             contentEl.innerHTML = escapeHtml(j.comment.content);
             contentEl.style.display = "";
             textarea.remove();
-            saveBtn.remove();
-            cancelBtn.remove();
+            btnContainer.remove();
+            actionsEl.style.display = '';
           } else {
             alert(j.error || "No se pudo editar el comentario");
           }
@@ -168,9 +199,9 @@ function attachPostHandlers(postEl) {
       cancelBtn.addEventListener("click", function (ev) {
         ev.preventDefault();
         textarea.remove();
-        saveBtn.remove();
-        cancelBtn.remove();
+        btnContainer.remove();
         contentEl.style.display = "";
+        actionsEl.style.display = '';
       });
     });
   });

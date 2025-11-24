@@ -8,7 +8,7 @@ class BlogPostForm(forms.ModelForm):
 
     class Meta:
         model = BlogPost
-        fields = ['title', 'content', 'image', 'published']
+        fields = ['title', 'content', 'image', 'video', 'published']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Título'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'placeholder': 'Contenido de la entrada...'}),
@@ -32,6 +32,25 @@ class BlogPostForm(forms.ModelForm):
                 'Formato de imagen no válido. Use JPG, PNG, GIF o WEBP.')
 
         return image
+
+    def clean_video(self):
+        video = self.cleaned_data.get('video')
+        if not video:
+            return video
+
+        # tamaño máximo 50MB para videos
+        max_size = 50 * 1024 * 1024
+        if video.size > max_size:
+            raise forms.ValidationError(
+                'El video es demasiado grande (máx 50MB).')
+
+        # tipos permitidos
+        valid_types = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime']
+        if hasattr(video, 'content_type') and video.content_type not in valid_types:
+            raise forms.ValidationError(
+                'Formato de video no válido. Use MP4, WebM, OGG o MOV.')
+
+        return video
 
     def save(self, commit=True, author=None):
         # Override save to handle tags_input
