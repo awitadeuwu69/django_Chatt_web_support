@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{% static 'css/modals-chat.css' %}" />
   <link rel="stylesheet" href="{% static 'css/kits-boleta.css' %}" />
   <link rel="stylesheet" href="{% static 'css/eventos.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/avatar.css' %}" />
 </head>
 
 <body>
@@ -64,9 +65,16 @@
         </nav>
 
         <div class="topbar-actions">
-          {% if user.is_authenticated %}
-          <div class="user-info">👤 <strong>{{ user.username }}</strong></div>
-          {% endif %}
+          <div class="user-info user-avatar-container">
+            {% if user.profile.foto_perfil %}
+            <img src="{{ user.profile.foto_perfil.url }}" alt="{{ user.username }}"
+              class="user-avatar user-avatar-sm user-avatar-dark">
+            {% else %}
+            <div class="user-avatar-placeholder user-avatar-sm user-avatar-dark">{{ user.username|slice:":1"|upper }}
+            </div>
+            {% endif %}
+            <strong>{{ user.username }}</strong>
+          </div>
 
           <button class="menu-btn" id="menuBtn" title="Menú">☰</button>
 

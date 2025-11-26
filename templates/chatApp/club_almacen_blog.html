@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{% static 'css/main.css' %}" />
   <link rel="stylesheet" href="{% static 'css/pages-topbar.css' %}" />
   <link rel="stylesheet" href="{% static 'css/club_almacen_blog.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/avatar.css' %}" />
 </head>
 
 <body>
@@ -73,8 +74,15 @@
         <section class="blog-section" id="post-{{ post.id }}">
           <article class="blog-post" data-post-id="{{ post.id }}">
             <h3>{{ post.title }}</h3>
-            <div class="post-meta">
-              Por {{ post.author.username }} — {{ post.created_at|date:"d M Y H:i" }}
+            <div class="post-meta" style="display: flex; align-items: center; gap: 8px;">
+              {% if post.author.profile.foto_perfil %}
+              <img src="{{ post.author.profile.foto_perfil.url }}" alt="{{ post.author.username }}"
+                class="user-avatar user-avatar-sm blog-author-avatar">
+              {% else %}
+              <div class="user-avatar-placeholder user-avatar-sm blog-author-avatar">{{
+                post.author.username|slice:":1"|upper }}</div>
+              {% endif %}
+              <span>Por {{ post.author.username }} — {{ post.created_at|date:"d M Y H:i" }}</span>
             </div>
 
             {% if post.video %}
@@ -150,12 +158,21 @@
               <div class="comments-list">
                 {% if post.comments.all %} {% for c in post.comments.all %}
                 <div class="comment-item" id="comment-{{ c.id }}" data-comment-id="{{ c.id }}">
-                  {% if c.author %}
-                  <strong>{{ c.author.username }}</strong>
-                  {% else %}
-                  <strong>Anon</strong>
-                  {% endif %}
-                  <small class="comment-time">{{ c.created_at|date:"d M Y H:i" }}</small>
+                  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                    {% if c.author %}
+                    {% if c.author.profile.foto_perfil %}
+                    <img src="{{ c.author.profile.foto_perfil.url }}" alt="{{ c.author.username }}"
+                      class="user-avatar user-avatar-xs comment-author-avatar">
+                    {% else %}
+                    <div class="user-avatar-placeholder user-avatar-xs comment-author-avatar">{{
+                      c.author.username|slice:":1"|upper }}</div>
+                    {% endif %}
+                    <strong>{{ c.author.username }}</strong>
+                    {% else %}
+                    <strong>Anon</strong>
+                    {% endif %}
+                    <small class="comment-time">{{ c.created_at|date:"d M Y H:i" }}</small>
+                  </div>
                   <div class="comment-content">
                     {{ c.content|linebreaks }}
                   </div>

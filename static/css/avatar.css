@@ -1,0 +1,144 @@
+/* ==================== AVATAR STYLES ==================== */
+/* Estilos reutilizables para avatares de usuario en toda la aplicación */
+
+.user-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px transparent;
+    transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Tamaños de avatar */
+.user-avatar-xs {
+    width: 24px;
+    height: 24px;
+    border-width: 1px;
+}
+
+.user-avatar-sm {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+}
+
+.user-avatar-md {
+    width: 48px;
+    height: 48px;
+    border-width: 2px;
+}
+
+.user-avatar-lg {
+    width: 64px;
+    height: 64px;
+    border-width: 3px;
+}
+
+.user-avatar-xl {
+    width: 96px;
+    height: 96px;
+    border-width: 3px;
+}
+
+/* Placeholder cuando no hay foto */
+.user-avatar-placeholder {
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.user-avatar-placeholder:hover {
+    transform: scale(1.05);
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Tamaños de placeholder */
+.user-avatar-placeholder.user-avatar-xs {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+    border-width: 1px;
+}
+
+.user-avatar-placeholder.user-avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    border-width: 2px;
+}
+
+.user-avatar-placeholder.user-avatar-md {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    border-width: 2px;
+}
+
+.user-avatar-placeholder.user-avatar-lg {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+    border-width: 3px;
+}
+
+.user-avatar-placeholder.user-avatar-xl {
+    width: 96px;
+    height: 96px;
+    font-size: 36px;
+    border-width: 3px;
+}
+
+/* Contenedor de avatar con username */
+.user-avatar-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-avatar-container .user-avatar,
+.user-avatar-container .user-avatar-placeholder {
+    flex-shrink: 0;
+}
+
+/* Variante para fondo oscuro */
+.user-avatar-dark {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-avatar-dark:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar-placeholder.user-avatar-dark {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.user-avatar-placeholder.user-avatar-dark:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Estilos específicos para blog */
+.blog-author-avatar {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.comment-author-avatar {
+    margin-right: 8px;
+    vertical-align: middle;
+}
