@@ -12,3 +12,6 @@ urllib3>=2.5.0
 google-api-python-client>=2.136.0
 google-auth-oauthlib>=1.2.0
 pillow>=10.4.0
+django-allauth>=1.11.0
+jwt>=2.6.0
+cryptography>=41.0.4
